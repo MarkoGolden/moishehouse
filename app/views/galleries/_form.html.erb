@@ -1,0 +1,10 @@
+<%= form_for @gallery, html: {multipart: true} do |f| %>
+  # ... other model fields
+
+  <%= f.fields_for :photos do |photo| %>
+    <%= photo.label :photo %><br />
+    <%= photo.file_field :photo %>
+  <% end %>
+
+  <%= f.submit %>
+<% end %>

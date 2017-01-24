@@ -1,0 +1,105 @@
+<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<% if !user_signed_in? %>
+				<a class="brand" href="/mintranet" style="margin-top:15px;font-size: 20pt;margin-left: 5px;"><span style="color:#33CCFF;">Mint</span>ranet</a>
+			<% else %>
+				<a class="brand" href="/mintranet" style="font-size: 20pt;margin-left: 5px;"><span style="color:#33CCFF;">Mint</span>ranet</a>
+			<% end %>
+			<ul class="nav pull-right" style="margin-bottom:-20px;">
+        	<% if user_signed_in? %>
+				<% if current_user.role == "resident" %>
+  				<li class="dropdown">
+              		<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                		Residents
+                		<b class="caret"></b>
+              		</a>
+              		<ul class="dropdown-menu">
+						<li><a href="/residents/myinfo">My Info</a></li>
+						<li><a href="#">Resources</a></li>
+						<li><a href="/residents/contacts">Contact List</a></li>
+						<li><a href="/residents/programs">Programs</a></li>
+						<li><a href="/residents/receipts">Receipts</a></li>
+						<li><a href="/residents/budget">View Budget</a></li>						
+					</ul>
+            	</li>
+				<% end %>
+				<% if current_user.role == "mhwow" %>
+  				<li class="dropdown">
+              		<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                		MHWOW
+                		<b class="caret"></b>
+              		</a>
+              		<ul class="dropdown-menu">
+										<li><a href="/mintranet/host_center/my_programs">My Programs</a></li>
+										<li><a href="/mintranet/residents/myinfo">My Info</a></li>										
+										<li><a href="/mintranet/host_center/register_program">Register a Program</a></li>
+										<li><a href="/mintranet/host_center/receipts_new">Upload Receipts</a></li>
+										<li><a href="/mintranet/host_center/scholarship_form">Scholarship Form</a></li>
+										<li><a href="/mhwow/guidelines">Guidelines & Policies</a>		</li>
+										<!-- <li><a href="/mhwow/program-ideas">Program Ideas</a></li> -->
+										<!-- <li><a href="/mhwow/help">Help</a></li> -->
+					</ul>
+            	</li>
+				<% end %>
+				<% if current_user.role == "admin" %>
+	          	<li class="dropdown">
+              		<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                		Admin
+                		<b class="caret"></b>
+              		</a>
+              		<ul class="dropdown-menu">
+				            <li><a href="/residents/myinfo">My Info</a></li>
+										<li><a href="/houses">Houses</a></li>
+										<li><a href="/users">Users</a></li>
+										<li><a href="/programs">Programs</a></li>
+										<li><a href="/receipts">Receipts</a></li>
+										<li><a href="/rents">Closeout</a></li>
+										<li><a href="/grants">Grants</a></li>
+										<li><a href="/reports">Reports</a></li>
+										<li><a href="#">Resources</a></li>
+									</ul>
+            	</li>
+				<% end %>
+				
+		        <li class="dropdown">
+		        	<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+		        		<i class="icon-user icon-white"></i> Logged in as <strong><%= current_user.email %></strong>
+		              	<b class="caret"></b>
+		            </a>
+		            <ul class="dropdown-menu">
+		              	<li><%= link_to "Logout", destroy_user_session_path, method: :delete %></li>
+		            </ul>
+						</li>          
+		        <% else %>
+		        <%= form_for("user", :url => user_session_path) do |f| %>
+		        <table style="margin-top:10px;margin-bottom:10px;">
+		        	<tbody>		        		
+			        	<tr class="sign-in-form">
+			        		<td class="sign-in-form">
+										<%= f.text_field :email, style: 'width: 160px; margin-right: 10px;margin-bottom: -5px;', placeholder: 'Email' %>
+									</td>
+									<td class="sign-in-form">
+									  <%= f.password_field :password, style: 'width: 160px;margin-bottom: -5px;', placeholder: 'Password' %>									  
+										<%= button_tag(id: 'sign_in_button', type: 'submit', class: "btn btn-success", style: 'margin-top: 5px;margin-left:5px;') do %>
+											<i class="icon-user icon-white"></i> Sign In
+										<% end %>
+									</td>
+								</tr>
+								<tr>
+									  <td><%= f.check_box :remember_me, style: 'margin-top: -5px' %>
+									  <%= f.label :remember_me, :class => "checkbox inline", style: 'color: #FFF;margin-left: -20px;margin-top:-10px;' %>
+									  
+									  <td>
+									  <%= link_to "Forgot your password?", new_password_path('user'), style: 'color: #FFF;float:left;margin-top:-5px;' %>
+									  </td>
+									  
+								</tr>								  
+								<% end %>
+							</tbody>
+		        </table>
+			<% end %>
+			</ul>
+		</div>
+	</div>
+</div>

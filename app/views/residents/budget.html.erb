@@ -1,0 +1,57 @@
+<!-- <div class="budget-params" style="margin-left: 450px;">
+	<form method="get" action="/residents/budget">					
+		<%#= select_tag 'payperiod_id', options_for_select(month_array), :style => "width: 105px;"%>
+		<div id="start-date" style="float: left;">
+	    <h5>START DATE</h5>
+	    <%#= select_tag 'start_date', options_for_select(month_array, :selected => @start_date.strftime("%B")), :style => "width: 105px;"%>
+	  </div>
+	  <div id="end-date" style="float: left; padding-left: 10px">
+	    <h5>END DATE</h5>
+	    <%#= select_tag 'end_date', options_for_select(month_array, :selected => @end_date.strftime("%m-%d-%Y")), :style => "width: 105px;"%></br>
+	  </div>				  				  
+		<input class="btn btn-primary" type="submit" value="search" style="margin:42px 12px 0px;" />				
+	</form>
+</div> -->
+<form method="get" action="/residents/budget">
+<h3 style="text-align:center;"><span style="color: red;">(Estimated)</span> Budget for <%= "#{(Date.today).strftime("%B, %Y")}" %>	</h3>
+
+<h3><%= select_tag 'date', options_for_select(budget_date), :style => "width: 105px;"%></h3>
+
+<input class="btn btn-primary" type="submit" value="Search" style="margin-top: -10px;" />			
+</form>
+
+ <table class="table table-condensed" frame="box" style="margin: 50px auto; width: 800px;">
+ 	<thead>
+ 		<th> </th>
+    <th style="text-align:center;border-right:1px solid #000;border-bottom:1px solid #000;border-left:1px solid #000;"><h2>BUDGET</h2></th>          
+    <th style="text-align:center;border-bottom:1px solid #000;border-right:1px solid #000;"><h2>SPENT</h2></th>
+    <th style="text-align:center;border-bottom:1px solid #000;"><h2>BALANCE</h2></th>
+  </thead>
+  <tbody>
+    <tr>
+    	<td style="text-align:center;border-right:1px solid #000;white-space:nowrap;">House Cleaning</td>
+
+      <td style="text-align:center;white-space:nowrap;border-right:1px solid #000;">      	
+      $<%= current_user.house.budget_cleaning.to_f %></td>   
+      <td style="text-align:center;">$<%= current_user.house.current_cleaning_budget_receipts %></td>
+      <td style="text-align:center;border-left:1px solid #000;">$<%= (current_user.house.budget_cleaning - current_user.house.current_cleaning_budget_receipts) %></td>   
+		</tr>
+		<tr>
+			<td style="text-align:center;border-right:1px solid #000;white-space:nowrap;">Receipts</td>		
+			<td style="text-align:center;border-right:1px solid #000;white-space:nowrap;">$<%= (current_user.house.budget_program + current_user.house.calculate_rollover) %> </td>
+			<td style="text-align:center;">$<%= current_user.house.current_month_receipts %></td>
+			<td style="text-align:center;border-left:1px solid #000;">$<%= (current_user.house.budget_program + current_user.house.calculate_rollover) - current_user.house.current_month_receipts %></td>				
+		</tr>
+	</tbody>	
+</table>
+
+	<div class="budget-breakdown" style="width:800px;margin:50px auto;">
+		<p style="font-size:14px;">Your monthly program budget is <strong>$<%= current_user.house.budget_program.to_i %></strong>. 
+			
+			With House Budget receipts in <%= "#{(Date.today - 2.months).strftime("%B")}" %> of <strong>$<%= current_user.house.calculate_two_months_receipts %></strong>, you were left with a "rollover" of <span style="color:red;"><strong>$<%= current_user.house.calculate_rollover.to_i %></strong></span>. 
+			
+			Adding this rollover to your original budget, your new budget is <strong>$<%= current_user.house.calculate_new_budget %>.</strong> 
+
+			Now, with <%= "#{(Date.today).strftime("%B")}" %> receipts of <strong>$<%= current_user.house.current_month_receipts %></strong>, that leaves you with <strong>$<%= (current_user.house.budget_program - current_user.house.current_month_receipts).to_f %></strong>.
+		</p>
+	</div>

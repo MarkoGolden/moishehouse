@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  description: MyText
+  program_type_id: 1
+  partnership: false
+  date: 2013-03-07
+  attended_total: 1
+  attended_residents: 1
+  attended_new: 1
+
+two:
+  name: MyString
+  description: MyText
+  program_type_id: 1
+  partnership: false
+  date: 2013-03-07
+  attended_total: 1
+  attended_residents: 1
+  attended_new: 1

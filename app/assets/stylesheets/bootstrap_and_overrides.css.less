@@ -1,0 +1,181 @@
+@import url("http://fonts.googleapis.com/css?family=Lato:300");	
+@import "twitter/bootstrap/bootstrap";
+// body { padding-top: 60px; }
+@import "twitter/bootstrap/responsive";
+
+// Set the correct sprite paths
+@iconSpritePath: asset-path("twitter/bootstrap/glyphicons-halflings.png");
+@iconWhiteSpritePath: asset-path("twitter/bootstrap/glyphicons-halflings-white.png");
+
+// Set the Font Awesome (Font Awesome is default. You can disable by commenting below lines)
+// Note: If you use asset_path() here, your compiled bootstrap_and_overrides.css will not
+//       have the proper paths. So for now we use the absolute path.
+@fontAwesomeEotPath: asset-path("fontawesome-webfont.eot?v=3.0.2");
+@fontAwesomeEotPath_iefix: asset-path("fontawesome-webfont.eot?#iefix&v=3.0.2");
+@fontAwesomeWoffPath: asset-path("fontawesome-webfont.woff?v=3.0.2");
+@fontAwesomeTtfPath: asset-path("fontawesome-webfont.ttf?v=3.0.2");
+
+// Font Awesome
+@import "fontawesome";
+
+// Glyphicons
+//@import "twitter/bootstrap/sprites.less";
+
+// Your custom LESS stylesheets goes here
+//
+// Since bootstrap was imported above you have access to its mixins which
+// you may use and inherit here
+//
+// If you'd like to override bootstrap's own variables, you can do so here as well
+// See http://twitter.github.com/bootstrap/customize.html#variables for their names and documentation
+//
+// Example:
+// @linkColor: #ff0000;
+@baseFontSize: 12px;
+
+.hero-unit {
+	margin-top: 50px;
+}
+
+#leftnav { 
+	width:270px; 
+	li {
+		&.active {
+			a {
+			background:blue;
+			color:white;
+			}
+		}
+	}
+}
+
+
+// .container {
+// 	min-height: 100%;
+// 	height: auto !important;
+// 	height: 100%;
+// 	margin: 0 auto -4em;
+// }
+
+// .footer, .push {
+// 	height: 4em;
+// }
+
+.section-with-margin { 
+	padding-top: 60px; 
+	margin-top: -60px;
+}
+
+.span9 {
+	width: 70%;
+	border-right: 1px solid #F5F5F5;
+}
+
+.form-horizontal .form-actions {  
+  background-color: none;
+  padding: 2em;
+}
+
+.form-actions {
+	background-color: #FFF;
+  border-top: none;  
+  padding: 19px 20px 20px 20px;
+}
+
+.edit_program_header {
+	margin-bottom: 2em;
+}
+
+// header {
+// 	margin-top: 5em;
+// }
+
+// .receipt-form {
+// 	margin-left: -24em;
+// }
+
+.receipt-image {
+	float: right;	
+	img {
+		margin: 1em auto;
+		max-height: 700px;
+		max-width: 500px;			
+	}
+}
+
+#user_search {
+	padding-right: 100px;
+}
+
+#user_bio {
+	height: 150px;
+}
+
+.tab-content .table tbody tr.success td.partnered {
+	height: 20px;
+	width: 20px;
+	
+}
+
+.partners {
+	width: 100px;	
+	overflow: auto;
+	word-wrap: break-word;
+	white-space: no wrap;
+}
+
+#grant-save {
+	clear: none;
+}
+
+.date-select {
+	width: 150px;
+	float: left;
+}
+
+#search-btn {
+	margin-top: -9px;
+	margin-left: 2px;
+}
+
+#devise-login {
+	margin-top: 5em;
+}
+
+#nav-menu-link {
+	max-width: 300px;	
+}
+
+#right-menu {
+	float: right;
+}
+
+.row {
+	margin-top: 70px;
+}
+
+.select.date-select {
+	max-width: 10px;
+}
+
+.span5 {
+	margin-top: -30px;
+}
+
+tbody .table-striped tr:hover td, tbody .table-striped tr:hover th {background-color:#f0f0f0;}
+
+#receipts-new {
+	margin-top: -15px;
+}
+
+#receipt-info {
+	margin-top: -15px;
+}
+
+tr.sign-in-form {
+	margin-top: 10px;
+}
+
+.td-align-center {
+	text-align: center;
+}

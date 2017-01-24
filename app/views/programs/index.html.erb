@@ -1,0 +1,226 @@
+<script>
+  $('#myTabs a[data-toggle="tab"]').click(function (e) {
+    e.preventDefault();
+    $(this).tab('show');
+  })
+
+  var rows = $('table.us-houses-table tr');
+  $('#showUSHouses').click(function() {
+    var usHouses = rows.filter('.us-houses-list').show();    
+  });
+
+  $('#hideUSHouses').click(function() {
+    var usHouses = rows.filter('.us-houses-list').hide();
+  });
+
+
+  function checkAll(check_all){
+  // Pass in a named "Check All" checkbox that appears on the same form where all 
+  // checkboxes should be checked.
+
+  // Loop through an array containing ALL inputs on same form as check_all
+  var inputs = check_all.form.getElementsByTagName("input");
+  for (var i = 0; i < inputs.length; i++) {  
+    // Only work on checkboxes, and NOT on the "Check All" checkbox
+    if (inputs[i].type == "checkbox" && inputs[i].name != check_all.name) { 
+      if(check_all.checked == true){
+        inputs[i].checked = true ;
+      }else{
+        inputs[i].checked = false ;
+      }
+    }  
+  }  
+}
+  $(document).ready(function () {
+    $("button.us-houses-toggle").click(function (e) {
+      $("tr.us-houses-list").toggle();
+      e.preventDefault();
+    });
+  });
+
+  $(document).ready(function () {
+    $("button.intl-houses-toggle").click(function (e) {
+      $("tr.intl-houses-list").toggle();
+      e.preventDefault();
+    });
+  });
+
+  function hideRow(row){
+  var row = document.getElementById(row);
+  row.style.display = 'none';
+  }
+  function showRow(row){
+  var row = document.getElementById(row);
+  row.style.display = '';
+  }
+</script>
+<header class="jumbotron subhead" id="overview">
+  <div class="container">
+    <h1>Programs</h1>
+    <p class="lead">View ongoing programs and events</p>
+  </div>
+</header>
+<div class="span11">  
+	<form method="get" action="/programs">
+  
+  <table class="table table-condensed zebra-striped us-houses-table" frame="box" style="padding:2px;">               
+    <tbody>      
+      <tr>
+        <td style="border:none; padding: 0px 0px 0px 10px;"><h3>US HOUSES</h3></td>
+      </tr>        
+      <tr>
+        <td style="border:none; padding: 0px 0px 20px 30px;">
+          <%= check_box_tag('check_all', 'check_all', false, :onClick => "checkAll(this);") %>
+          <label class="checkbox inline" style="padding-left: 5px;">All U.S. Houses</label>
+          <button class="btn btn-primary us-houses-toggle" style="margin-left: 10px;">show/hide</button>
+        </td>
+        
+      </tr>                  
+      <% @us_houses.each_slice(5) do |slice| %>       
+      <tr class="us-houses-list" style="display:none;">
+        <% slice.each do |h| %>
+          <% if h.active = false %>
+            <td style="border: none;padding: 0px 0px 5px 30px; color: red;">
+              <%= check_box_tag("house_id[]", h.id) %>
+              <label class="checkbox inline" style="padding-left: 5px;">
+                <%= "#{h.city}, #{h.state}" %></label>
+              </td>
+          <% else %>          
+            <td style="border: none;padding: 0px 0px 5px 30px;">
+              <%= check_box_tag("house_id[]", h.id) %>
+              <label class="checkbox inline" style="padding-left: 5px;">
+                <%= "#{h.city}, #{h.state}" %></label>
+            </td>
+          <% end %>           
+        <% end %>
+        </div>
+      </tr>          
+      <% end %>          
+    </div>
+    </tbody>
+  </table>
+  <table class="table table-condensed intl-houses-table" frame="box" style="padding:2px;">
+    <tbody>      
+      <tr>
+        <td style="border:none; padding: 0px 0px 0px 10px;"><h3>INTERNATIONAL HOUSES</h3></td>
+      </tr>        
+      <tr>
+        <td style="border:none; padding: 0px 0px 20px 30px;">
+          <%= check_box_tag('check_all', 'check_all', false, :onClick => "checkAll(this);") %>
+          <label class="checkbox inline" style="padding-left: 5px;">All International Houses</label><button class="btn btn-primary btn-medium intl-houses-toggle" style="margin-left:10px;">show/hide</button>
+        </td>
+      </tr>                  
+      <% @intl_houses.each_slice(5) do |slice| %>       
+      <tr class="intl-houses-list" style="display:none;">
+        <% slice.each do |h| %>                  
+            <td style="border: none;padding: 0px 0px 5px 30px;">
+              <%= check_box_tag("house_id[]", h.id) %>
+              <label class="checkbox inline" style="padding-left: 5px;">
+                <%= "#{h.city}, #{h.state}" %></label>
+            </td>
+        <% end %>
+        </div>
+      </tr>          
+      <% end %>
+    </div>
+    </tbody>
+  </table>
+</div>
+  <%#= select_tag 'house_id', options_from_collection_for_select(House.where("id NOT IN (11)").order("city, state"), :id, :location, :selected => params[:house_id]), :prompt => "All Houses"%>
+  <div class="filters" style="margin-left:320px; text-align:center;"> 
+    <div id="start-date" style="float: left;">
+      <h5>START DATE</h5>
+      <%= select_tag 'start_date', options_for_select(month_array, :selected => (Date.today - 6.months).strftime("%m-%d-%Y")), :style => "width: 105px;"%>
+    </div>
+    <div id="end-date" style="float: left; padding-left: 10px">
+      <h5>END DATE</h5>
+      <%= select_tag 'end_date', options_for_select(month_array, :selected => @end_date.strftime("%m-%d-%Y")), :style => "width: 105px;"%></br>
+    </div>
+    <div id="program-type" style="float: left; padding-left: 10px; text-align:left;">
+      <h5 id="prog-type-header" style="margin-left: 30px;">PROGRAM TYPE</h5>
+      <%= select_tag 'program_type_id', options_from_collection_for_select(ProgramType.order("name"), :id, :name, :selected => params[:program_type_id]), :prompt => "All Program Types", :style => "width: auto;"%>
+      <input class="btn btn-primary" type="submit" value="Search" style="margin-top: -10px;" />				<br><br>
+    </div>    
+  </form>  
+  </div>
+  
+	<div class="span11">
+
+  <table class="table" frame="box" style="padding: 2px;background-color: #E0FFFF;">
+    <thead>
+      <!-- <tr>
+        <td><%# @selected_houses.each do |id| %>
+            <%# house = House.find(id) %>
+            <%#= "#{house.city}, #{house.state}" %>
+            <%# end %></td>
+      </tr> -->
+      <tr>
+        <th>Receipts</th>
+        <th>People</th>
+        <th>Program Types</th>
+        <th>Programs</th>        
+      </tr>
+    </thead>
+    <tbody>            
+      <tr>
+        <td style="border-right: #FFF 1px solid;"><p style="color:green; font-size: 10pt; margin-bottom: 0px;">(<%=@progstats[:receipts_approved]%>)</p>
+            <p style="color:red; font-size: 10pt; margin-bottom: 0px;">(<%=@progstats[:receipts_rejected]%>)</p>
+            <p style="color:blue; font-size: 10pt;">(<%=@progstats[:receipts_submitted] %>)</p></td>
+        <td style="border-right: #FFF 1px solid;">Total Attended: <%=@progstats[:attended_total]%> <br> 
+            Total First-Timers: <%=@progstats[:attended_new]%> <br> 
+            Largest: <%=@progstats[:largest]%></td>
+        <td style="border-right: #FFF 1px solid;">Jewish Culture and Holidays & BRNS: <%=@progstats[:culture_programs] + @progstats[:birthright_next_programs]%>/<%=@progstats[:culture_attended] + @progstats[:birthright_next_attended]%> <br>
+            Jewish Learning: <%=@progstats[:learning_programs]%>/<%=@progstats[:learning_attended]%> <br> 
+            Repair the World: <%=@progstats[:repair_programs]%>/<%=@progstats[:repair_attended]%> <br> 
+            Social: <%=@progstats[:social_programs]%>/<%=@progstats[:social_attended]%></td>
+        <td>Programs: <%=@progstats[:program_count]%> <br> 
+            Avg.: <%= @progstats[:avg_per_program]%> / Program <br> 
+            Partners: <%=@progstats[:partners]%> <br> 
+            Direct Service: <%=@progstats[:direct_service]%></td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th style="width: 80px;">House</th>
+        <th>Name</th>
+        <th style="width: 100px;">Direct Service</th>
+        <th>Partnered</th>
+        <th>Complete</th>
+        <th>Photo</th>
+        <th>Receipts</th>
+        <th>Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @programs.each do |p| %>
+        <tr<% if p.completed_date %> class="warning"<% end %>>
+          <td style="border-right: #FFF 1px solid;"><%= p.date.strftime("%D") %></td>
+          <td style="border-right: #FFF 1px solid; width:170px;"><%= p.house.location if p.house%></td>
+          <td style="border-right: #FFF 1px solid; width:170px;"><%= p.name %><br />T: (<%= p.attended_total %>), F:(<%= p.attended_new %>), R:(<%= p.attended_residents %>)</td>
+          <td style="border-right: #FFF 1px solid;text-align:center;"><% if p.direct_service%><img src="/assets/greencheck.png" /><% end %></td>
+          <!-- <td class="partnered"><%# if p.partner %><span class="label label-inverse"><div class="partners"><%#=p.partner%></div></span><#% end %></td> -->
+          <td style="border-right: #FFF 1px solid;text-align:center;"><% if p.partner %><img src="/assets/greencheck.png" /><% end %></td>
+          <% if p.date.past? %>
+          <td style="border-right: #FFF 1px solid; text-align:center;"><img src="/assets/greencheck.png" /></td>
+          <% else %>
+          <td style="border-right: #FFF 1px solid; text-align:center;">No</td>
+          <% end %>
+          <%# if photo is there, greencheck %>          
+          <td style="border-right: #FFF 1px solid;">--</td>
+          <%# else %>
+          <%# red plus %>
+          <%# end %>
+          <td style="border-right: #FFF 1px solid;"><% p.receipts.each do |r|%><%=link_to number_to_currency(r.amount).to_s, "/receipts/edit/#{r.id}", :class => r.button_color %><% end %></td>
+          <td><%= link_to "Edit", "/programs/edit/#{p.id}", :class => 'btn btn-medium' %></td>
+        </tr>
+        
+      <% end %>                
+    </tbody>
+  </table>
+  </section> 
+    <%= link_to "Download Excel", "/programs/export_activity.xlsx?start_date=#{@start_date}&end_date=#{@end_date}", :class => 'btn btn-large btn-primary', :style => 'margin: 0 auto;' %> 
+</div>
+</div>

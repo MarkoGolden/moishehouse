@@ -1,0 +1,55 @@
+<header class="jumbotron subhead" id="overview">
+  <div class="container">
+    <h1>Grant Programs</h1>
+    <p class="lead">Programs where Grants were used</p>
+  </div>
+</header>
+<div class="filters" style="margin-left:320px; text-align:center;"> 
+  <div id="start-date" style="float: left;">
+    <h5>START DATE</h5>
+    <%= select_tag 'start_date', options_for_select(month_array, :selected => @start_date.strftime("%m-%d-%Y")), :style => "width: 105px;"%>
+  </div>
+  <div id="end-date" style="float: left; padding-left: 10px">
+    <h5>END DATE</h5>
+    <%= select_tag 'end_date', options_for_select(month_array, :selected => @end_date.strftime("%m-%d-%Y")), :style => "width: 105px;"%></br>
+  </div>
+  <div id="program-type" style="float: left; padding-left: 10px; text-align:left;">
+    <h5 id="prog-type-header" style="margin-left: 30px;">PROGRAM TYPE</h5>
+    <%= select_tag 'program_type_id', options_from_collection_for_select(Granttype.order("name"), :id, :name, :selected => params[:program_type_id]), :prompt => "All Grant Types", :style => "width: auto;"%>
+    <input class="btn btn-primary" type="submit" value="filter" style="margin-top: -10px;" />				
+	</div>
+</div>
+<div class="span11">
+<table class="table table-striped">
+  <thead>
+    <tr>      
+      <th>Date</th>
+      <th>House</th>
+      <th>Name</th>
+      <th>Grant</th>			  
+      <th>Receipts</th>
+      <th>Edit</th>
+    </tr>
+  </thead>
+  <tbody>
+  	<% @programs.each do |p| %>
+        <tr<% if p.completed_date %> class="warning"<% end %>>
+          <td style="border-right: #FFF 1px solid;"><%= p.date.strftime("%D") %></td>
+          <td style="border-right: #FFF 1px solid; width:170px;"><%= p.house.location if p.house%></td>
+          <td style="border-right: #FFF 1px solid; width:170px;"><%= p.name %><br />T: (<%= p.attended_total %>), F:(<%= p.attended_new %>), R:(<%= p.attended_residents %>)</td>
+          <td style="border-right: #FFF 1px solid; width:170px;"><% p.receipts.each do |r| %>
+            <% if r.grant != nil%>
+              <% grant_name = [] %>
+              <% grant_name << r.grant.name %>
+              <% grant_name.first %>              
+            <% end %>
+            <% end %>
+          </td>
+          <td style="border-right: #FFF 1px solid;"><% p.receipts.each do |r|%><%=link_to number_to_currency(r.amount).to_s, "/receipts/edit/#{r.id}", :class => r.button_color %><% end %></td>
+          <td><%= link_to "Edit", "/programs/edit/#{p.id}", :class => 'btn btn-medium' %></td>
+        </tr>
+        <tr>        
+    <% end %>
+	</tbody>
+</table>
+</div>

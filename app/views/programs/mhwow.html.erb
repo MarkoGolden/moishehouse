@@ -1,0 +1,148 @@
+<script>
+  $('#myTabs a[data-toggle="tab"]').click(function (e) {
+    e.preventDefault();
+    $(this).tab('show');
+  })
+
+$(document).ready(function() {
+  console.log("hi");
+  $(".status_select").change(function(){
+    val = $(this).val();
+    
+    if(val == 2) {
+      $.post("/approve_program",{user_id: $(this).attr('submitter_id'), program_id: $(this).attr('program_id') });
+    } else {
+      $.post("/update_status", {program_id: $(this).attr('program_id'), status: val});
+    }
+
+  });
+
+  // $('#program_status').change(function() {
+  //   console.log('blahblah');
+  //   $('#update-status').submit();
+  // });
+});
+  
+
+</script>
+<header class="jumbotron subhead" id="overview">
+  <div class="container">
+    <h1>MHWOW Programs</h1>
+    <p class="lead">View ongoing programs and events</p>
+  </div>
+</header>
+<div class="span11">  
+	<form method="get" action="/programs/mhwow">         
+</div>
+  <%#= select_tag 'house_id', options_from_collection_for_select(House.where("id NOT IN (11)").order("city, state"), :id, :location, :selected => params[:house_id]), :prompt => "All Houses"%>
+  <div class="filters" style="margin-left:285px; text-align:center;"> 
+    <div id="start-date" style="float: left;">
+      <h5>START DATE</h5>
+      <%= select_tag 'start_date', options_for_select(month_array, :selected => @start_date.strftime("%m-%d-%Y")), :style => "width: 105px;"%>
+    </div>
+    <div id="end-date" style="float: left; padding-left: 10px">
+      <h5>END DATE</h5>
+      <%= select_tag 'end_date', options_for_select(month_array, :selected => @end_date.strftime("%m-%d-%Y")), :style => "width: 105px;"%></br>
+    </div>
+    <div id="mhwow-location" style="float: left; padding-left: 10px; text-align:center;">
+      <h5>LOCATION</h5>
+      <%= select_tag 'program_city', options_for_select(["San Diego MHWOW", "Los Angeles MHWOW", "Alumni MHWOW"], :selected => params[:program_city]), :prompt => "All Locations", :style => "width: auto;" %>
+    </div>
+    <div id="program-type" style="float: left; padding-left: 10px; text-align:left;">
+      <h5 id="prog-type-header" style="margin-left: 30px;">PROGRAM TYPE</h5>
+      <%= select_tag 'program_type_id', options_from_collection_for_select(ProgramType.where("id IN (1,2,3,4,8)"), :id, :name, :selected => params[:program_type_id]), :prompt => "All Program Types", :style => "width: auto;"%>
+    <!-- <div id="by-user" style="float: left; padding-left: 10px; text-align:left;"> -->
+    <%#= select_tag 'submitter_id', options_from_collection_for_select(User.where(mhwow: true).order("first_name"), :id, :fullname, :selected => params[:submitter_id]), :prompt => "All Users", :style => "width: auto;"%>
+    <!-- </div> -->
+      <input class="btn btn-primary" type="submit" value="filter" style="margin-top: -10px;" />				
+    </div>    
+    </div>
+  </form>  
+  </div>
+	<div class="span12">
+
+  <table class="table" frame="box" style="padding: 2px;background-color: #E0FFFF;max-width:600px;" align="center">
+    <thead>
+      <!-- <tr>
+        <td><%# @selected_houses.each do |id| %>
+            <%# house = House.find(id) %>
+            <%#= "#{house.city}, #{house.state}" %>
+            <%# end %></td>
+      </tr> -->
+      <tr style="max-width: 100px;">
+        <th>Receipts</th>
+        <th>People</th>        
+        <th>Programs</th>        
+      </tr>
+    </thead>
+    <tbody>            
+      <tr style="text-align:center;">
+        <td style="border-right: #FFF 1px solid;"><p style="color:green; font-size: 10pt; margin-bottom: 0px;">(<%=@progstats[:receipts_approved]%>)</p>
+            <p style="color:red; font-size: 10pt; margin-bottom: 0px;">(<%=@progstats[:receipts_rejected]%>)</p>
+            <p style="color:blue; font-size: 10pt;">(<%=@progstats[:receipts_submitted] %>)</p></td>
+        <td style="border-right: #FFF 1px solid;">Total Attended: <%=@progstats[:attended_total]%> <br>         
+            Largest: <%=@progstats[:largest]%></td>     
+        <td>Programs: <%=@progstats[:program_count]%> <br> 
+            Avg.: <%= @progstats[:avg_per_program]%> / Program <br>
+            San Diego: <%= @sd_programs_count %><br>
+            Alumni: <%= @alumni_programs_count %>       
+      </tr>
+    </tbody>
+  </table>
+  <table class="table">
+    <thead>
+      <tr>
+        <th style="width: 100px;">Date</th>
+        <th>MHWOW Host</th> 
+        <th style="width:150px;">Program Location</th>                       
+        <th>Name</th>
+        <th style="width: 90px;">Status</th>        
+        <th>Photo</th>
+        <th>Receipts</th>
+        <th>Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @programs.each do |p| %>
+        <tr<% if p.completed_date %> class="success"<% end %>>
+          <% if p.date != nil %>
+          <td style="border-right: #FFF 1px solid; width: 100px;"><%= p.date.strftime('%m/%d/%Y') %></td>
+          <% end %>
+          <td style="border-right: #FFF 1px solid; width:100px;"><%= User.find(p.submitter_id).firstlast%></td>
+          <% if p.mhwowcity_id != nil %>
+          <td><%= Mhwowcity.find(p.mhwowcity_id).location %></td>
+          <% else %>
+          <td><%= "#{User.find(p.submitter_id).mail_city}, #{User.find(p.submitter_id).mail_state}" %></td>
+          <% end %>
+          <td style="border-right: #FFF 1px solid; width:190px;"><%= p.name %><br />Attended: (<%= p.attended_total %>)</td>
+
+
+          <%= form_for :program, :url => programs_update_path, :html => { :class => 'form-horizontal', :id => 'update-status', :multipart => true } do |f| %>        
+            <td style="width: 90px;">
+              <%= f.hidden_field :id, :value => p.id %>
+              <%= f.select :status, 
+                  options_for_select([["Submitted", "1"], ["Approved", "2"], ["Declined", "3"]], :selected => p.check_status), {}, {:style => 'width:100px;', :class => :status_select, :submitter_id => p.submitter_id, :program_id => p.id}
+                   %>
+            </td>
+          <% end %>
+
+
+          <%# if photo is there, greencheck %>          
+          <td style="border-right: #FFF 1px solid;"><a href="#" class="btn btn-success btn-small"><i class="icon-white icon-ok-sign"></i></a></td>
+          <%# else %>
+          <!-- <a href="#" class="btn btn-success btn-large"><i class="icon-white icon-plus-sign"></i> Bootstrap Button Generator</a> -->
+          <%# end %>
+          <%= form_for :receipt, :url => receipts_update_path, :html => { :class => 'form-horizontal', :multipart => true } do |f| %>
+            <%= f.hidden_field :id, :value => p.id %>
+          <td style="border-right: #FFF 1px solid;"><% p.receipts.each do |r|%><%=link_to number_to_currency(r.amount).to_s, "/receipts/edit/#{r.id}", :class => r.button_color %><% end %></td>
+          <% end %>
+          <td style="width:120px;"><%= link_to "Edit", "/programs/edit/#{p.id}", :class => 'btn btn-medium' %>
+              <%= link_to "Delete", "/programs/destroy/#{p.id}", :class => 'btn btn-danger' %></td>
+        </tr>
+      <% end %>                        
+    </tbody>
+  </table>
+  </section>
+  <%= link_to "Download Excel", "/programs/mhwow_activity.xlsx?start_date=#{@start_date}&end_date=#{@end_date}", :class => 'btn btn-large btn-primary' %>
+</div>
+</div>

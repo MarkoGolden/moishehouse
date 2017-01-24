@@ -1,0 +1,41 @@
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#about-us').hover(function() {
+		$('#about-menu').show();		
+		$('#snapshot').hide();
+	}, function() {
+		$('.other').hover(function(){
+			$('#about-menu').hide();
+			$('#snapshot').show();
+		})		
+	});
+});
+
+$(document).ready(function() {
+	$('#houses').hover(function() {
+		$('#houses-menu').show();		
+		$('#snapshot').hide();
+	}, function() {
+		$('.other').hover(function(){
+			$('#houses-menu').hide();
+			$('#snapshot').show();
+		})		
+	});
+});
+</script>
+
+<div id="logo">
+	<%= link_to image_tag("/assets/mhlogonew.png"), root_path %>
+</div>
+
+<div id="nav">
+	<div id="nav-content">
+		<li class="left-nav-item" id="about-us"><%= link_to 'ABOUT US', root_path %></li>		
+		<li class="left-nav-item other"><%= link_to 'PRESS', press_path %></li>
+		<li class="left-nav-item other"><%= link_to 'FAQ', faq_path %></li>		
+		<li class="right-nav-item other"><%= link_to 'MHWOW', 'http://mhwow.lvh.me:3000', :target => "_blank" %></li>
+		<li class="right-nav-item" id="learning"><%= link_to 'LEARNING', learning_path %></li>		
+		<li class="right-nav-item" id="houses"><%= link_to 'HOUSES', houselist_path %></li>
+	</div>
+</div>
+

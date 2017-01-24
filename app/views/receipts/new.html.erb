@@ -1,0 +1,68 @@
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#opened_date').datepicker({ dateFormat: "yy-mm-dd"});
+  });
+</script>
+<div class="row">
+<div class="span3">
+</div>
+<div class="span9">
+	<div class="receipt-form">
+		<%= form_for :receipt, :url => receipts_create_path, :html => { :class => 'form-horizontal', :multipart => true } do |f| %>
+<section class="section-with-margin" id="basic">
+  <fieldset>
+	<legend>Receipt Info</legend>
+	<div class="row">
+		<div class="span4">
+			  <div class="control-group">
+			    <%= f.label :program_id, :class => 'control-label' %>
+			    <div class="controls">
+			        <%= f.collection_select :program_id, Program.all, :id, :name%>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <%= f.label :amount, :class => 'control-label' %>
+			    <div class="controls">
+			        <%= f.text_field :amount, :class => "input-medium"%>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <%= f.label :purchaser_id, :class => 'control-label' %>
+			    <div class="controls">
+			        <%= f.collection_select :purchaser_id, User.all, :id, :first_name%>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <%= f.label :description, :class => 'control-label' %>
+			    <div class="controls">
+			        <%= f.text_field :description, :class => "input-medium"%>
+			    </div>
+			  </div>			  
+		</div>
+		<div class="span3 offset1">
+			    <ul class="thumbnails">
+				  <li class="span2 offset3">
+				    <div class="thumbnail">
+				      <h3>Upload Image</h3>
+					  <p class="text-center">
+						<%= f.file_field :receipt %>						
+					  </p>
+				    </div>
+				  </li>
+				</ul>
+		</div>
+	</div>	
+  </fieldset>
+</section>
+<fieldset>	
+  <div class="form-actions">
+    <%= f.hidden_field :house_id, :value => current_user.house_id %>
+    <%= f.hidden_field :submitter_id, :value => current_user.id %>
+    <%= f.submit "Save", :class => 'btn btn-large btn-block btn-primary' %>
+    <%= link_to "Cancel", receipts_index_path, :class => 'btn btn-large btn-block' %>
+  </div>
+</fieldset>
+	</div>
+</div>
+</div>
+<% end %>

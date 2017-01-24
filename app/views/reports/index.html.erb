@@ -1,0 +1,239 @@
+<script>
+  $('#myTabs a[data-toggle="tab"]').click(function (e) {
+    e.preventDefault();
+    $(this).tab('show');
+  })
+</script>
+  <p class="pull-right">
+		<br />
+		<% if @p.locked_rent %>
+		<%= link_to "Final Report: #{@p.date.strftime("%D")}", "/reports/export_receipts.xlsx?payperiod=" + @p.id.to_s, :class => 'btn btn-large btn-primary' %>
+		<%= link_to "Individual Report: #{@p.date.strftime("%D")}", "/reports/export_individual.xlsx?payperiod=" + @p.id.to_s, :class => 'btn btn-large btn-primary' %>
+		<% end %>
+	</p>
+
+<header class="jumbotron subhead" id="overview">
+  <div class="container">
+	<%= form_tag(reports_index_path) %>
+	<h1>Report:</h1>
+	<select id="payperiod" name="payperiod">
+		<%= Payperiod.where("locked_rent = true and locked = true").order("date DESC").each do |p|%>
+		<option value="<%=p.id%>"<%=" selected" if p.id.to_s == params[:payperiod].to_s%>><%=p.date.strftime("%D")%></option>
+		<% end %>
+	</select>
+	<!-- <select id="house" name="house">
+		<option value="all-houses">All Houses</option>
+		<%#= House.where("active = TRUE").order("city ASC").each do |h| %>			
+			<option value="<#%=h.id%>"><#%= h.city %></option>
+			<#% end %>
+	</select> -->
+	<%= submit_tag "Update"%>
+	
+    <p class="lead">Rent and receipt histories</p>
+  </div>
+</header>
+<div id="myTabs" class="container">
+	<ul class="nav nav-tabs">
+	    <li class="active"><a href="#receipts" data-toggle="tab">Resident Receipts</a></li>
+	    <li><a href="#mhwowreceipts" data-toggle="tab">MH:WOW Receipts</a></li>
+	    <li><a href="#rent" data-toggle="tab">Rent</a></li>
+	    <li><a href="#brn" data-toggle="tab">Birthright NEXT</a></li>
+	    <li><a href="#direct" data-toggle="tab">Direct Service</a></li>
+	</ul>
+</div>
+<div class="tab-content">
+  <section class="tab-pane active" id="receipts">
+		<table class="table table-striped">
+		  <thead>
+		    <tr>
+		      <th>Submitted</th>
+		      <th>House</th>
+		      <th>Amount</th>
+		      <th>Submitter</th>
+		      <th>Program</th>
+		      <th>Program Type</th>
+		      <th>Status</th>
+		    </tr>
+		  </thead>
+		  <tbody>		
+		  <% if @h == nil %>
+				<%@p.receipts.where("house_id <> 84").order("submit_date DESC").each do |receipt| %>
+				  <tr class="<%=receipt.row_color%>">
+			        <td width="100px;"><%= receipt.submit_date.to_datetime.strftime("%m/%-d/%Y") %></td>
+			        <td width="100px;"><%= receipt.house.location %></td>
+							<td width="100px;"><h3><%= number_to_currency(receipt.amount) %></h3></td>
+							<% if receipt.submitter.nil? %>
+			        <td width="100px;">Unknown</td>		        
+			        <% else %>
+							<td width="100px"><%= raw receipt.submitter.firstlast %>
+			        <% end %>
+			        <td width="300px;"><%= receipt.program.name if receipt.program%><br /><%= receipt.description %>
+			        <td><%= receipt.program.program_type.name if receipt.program.program_type %></td>
+			        <td><%=raw receipt.status_name_html %></td>
+			      </tr>
+				<% end %>
+			<% else %>
+			<% @h.each do |house| %>
+				<% @p.receipts.where("house_id = #{house.id}").order("submit_date DESC").each do |receipt| %>
+					<tr class="<%=receipt.row_color%>">
+		        <td width="100px;"><%= receipt.submit_date.to_datetime.strftime("%m/%-d/%Y") %></td>
+		        <td width="200px;"><%= receipt.house.location %></td>
+						<td width="100px;"><h3><%= number_to_currency(receipt.amount) %></h3></td>
+						<% if receipt.submitter.nil? %>
+		        <td width="100px;">Unknown</td>		        
+		        <% else %>
+						<td width="100px"><%= raw receipt.submitter.firstlast %>
+		        <% end %>
+		        <td width="300px;"><%= receipt.program.name if receipt.program%><br /><%= receipt.description %>
+		        <td><%= receipt.program.program_type.name if receipt.program %></td>
+		        <td><%=raw receipt.status_name_html %></td>
+		      </tr>
+		      <% end %>
+		    <% end %>		  
+		  <% end %>
+
+		  </tbody>
+		</table>
+  </section>
+  <section class="tab-pane" id="mhwowreceipts">
+		<table class="table table-striped">
+		  <thead>
+		    <tr>
+		      <th>Submitted</th>
+		      <th>Program Date</th>
+		      <th>Submitter</th>
+		      <th>Program</th>
+		      <th>Amount</th>
+		      <th>Description</th>		      
+		      <th>Status</th>
+		    </tr>
+		  </thead>
+		  <tbody>		  	
+			<%@p.receipts.where("house_id = 84").order("submit_date DESC").each do |receipt| %>
+			<%# possibly remove this nil checker later %>
+			<% if receipt.program != nil && receipt.program.date != nil %>
+			  <tr class="<%=receipt.row_color%>">
+		        <td width="80px;"><%= receipt.submit_date.to_datetime.strftime("%m/%-d/%Y") %></td>
+		        <td width="100px;"><%= receipt.program.date.to_datetime.strftime("%m/%-d/%Y") %></td>
+		        <% if receipt.submitter != nil %>
+		        <td width="100px;"><%= receipt.submitter.firstlast %></td>
+		        <% else %>
+		        <td width="100px;">Unknown</td>
+		        <% end %>		        
+						<td width="300px;"><%= receipt.program.name %></td>
+						<td width="100px;"><h4><%= number_to_currency(receipt.amount) %></h4></td>						
+		        <td><%= receipt.description %></td>
+		        <td><%= link_to receipt.status_name_html.html_safe,
+		                      "/receipts/edit/#{receipt.id}" %></td>
+		      </tr>
+			<% end %>
+			<% end %>
+		  </tbody>
+		</table>
+  </section>
+  <section class="tab-pane" id="rent">
+		<table class="table table-striped">
+		  <thead>
+		    <tr>
+		      <th>House</th>
+		      <th>Amount</th>
+		      <th>Adjustment</th>
+		      <th>Notes</th>
+		      <th>Total</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+			<%@p.rents.where("house_id <> 84").each do |rent| %>
+			  <tr>
+		        <td><%=rent.house.location%></td>
+		        <td><%=number_to_currency(rent.amount)%></td>
+		        <td><%=rent.adjustment%></td>
+		        <td><%=rent.notes%></td>
+		        <td><%=number_to_currency(rent.adjustment.to_f + rent.amount.to_f)%></td>
+		      </tr>
+			<% end %>
+		  </tbody>
+		</table>
+  </section>
+
+  <section class="tab-pane" id="mhwowreceipts">
+		<table class="table table-striped">
+		  <thead>
+		    <tr>
+		      <th>Submitted</th>
+		      <th>Program Date</th>
+		      <th>Submitter</th>
+		      <th>Program</th>
+		      <th>Amount</th>
+		      <th>Description</th>		      
+		      <th>Status</th>
+		    </tr>
+		  </thead>
+		  <tbody>		  	
+			<%@p.receipts.where("house_id = 84").order("submit_date DESC").each do |receipt| %>
+			<%# possibly remove this nil checker later %>
+			<% if receipt.program != nil && receipt.program.date != nil %>
+			  <tr class="<%=receipt.row_color%>">
+		        <td width="80px;"><%= receipt.submit_date.to_datetime.strftime("%m/%-d/%Y") %></td>
+		        <td width="100px;"><%= receipt.program.date.to_datetime.strftime("%m/%-d/%Y") %></td>
+		        <% if receipt.submitter != nil %>
+		        <td width="100px;"><%= receipt.submitter.firstlast %></td>
+		        <% else %>
+		        <td width="100px;">Unknown</td>
+		        <% end %>		        
+						<td width="300px;"><%= receipt.program.name %></td>
+						<td width="100px;"><h4><%= number_to_currency(receipt.amount) %></h4></td>						
+		        <td><%= receipt.description %></td>
+		        <td><%= link_to receipt.status_name_html.html_safe,
+		                      "/receipts/edit/#{receipt.id}" %></td>
+		      </tr>
+			<% end %>
+			<% end %>
+		  </tbody>
+		</table>
+  </section>
+  <section class="tabe-pane" id="brn">
+
+  </section>
+  <section class="tab-pane" id="direct">
+		<table class="table table-striped">
+		  <thead>
+		    <tr>
+		      <th>Submitted</th>
+		      <th>Program Date</th>
+		      <th>House</th>
+		      <th>Amount</th>
+		      <th>Submitter</th>
+		      <th>Program</th>
+		      <th>Program Type</th>
+		      <th>Status</th>
+		    </tr>
+		  </thead>
+		  <tbody>		  	
+		  	<% @p.receipts.each do |receipt| %>
+		  	<% if receipt.program %>
+					<% if receipt.program.direct_service = true %>
+			  		<tr class="<%=receipt.row_color%>">
+			        <td width="100px;"><%= receipt.submit_date.to_datetime.strftime("%m/%-d/%Y") %></td>
+			        <% if receipt.program.date != nil %>
+			        <td width="100px;"><%= receipt.program.date.to_datetime.strftime("%m/%-d/%Y") %></td>
+			        <% end %>
+				        <td width="150px;"><%= receipt.house.location %></td>
+								<td width="100px;"><h3><%= number_to_currency(receipt.amount) %></h3></td>
+								<% if receipt.submitter.nil? %>
+				        <td width="100px;">Unknown</td>		        
+				        <% else %>
+								<td width="100px"><%= raw receipt.submitter.firstlast %>
+				        <% end %>
+				        <td width="300px;"><%= receipt.program.name if receipt.program%><br /><%= receipt.description %>
+				        <td><%= receipt.program.program_type.name if receipt.program.program_type %></td>
+				        <td><%= link_to receipt.status_name_html.html_safe,
+		                      "/receipts/edit/#{receipt.id}" %></td>
+			      </tr>
+			    <% end %>
+			  <% end %>
+			<% end %>
+		  </tbody>
+		</table>
+  </section>
+</div>

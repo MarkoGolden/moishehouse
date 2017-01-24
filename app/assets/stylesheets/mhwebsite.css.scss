@@ -1,0 +1,262 @@
+// Place all the styles related to the mhwebsite controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+// MOISHE HOUSE WEBSITE
+
+body {
+	font-family: Lato;
+}	
+
+.container {
+	width: 980px;
+	padding-bottom:50px;
+	margin: 0 auto;	
+	&:before, &:after {
+	    content:"";
+	    display:table;
+	}
+	&:after {
+	    clear:both;
+	}
+}
+
+#nav {
+	list-style: none;
+	width: 100%;	
+	border-bottom: #D3D3D3 solid 1px;
+	overflow: hidden;	
+	#nav-content {
+		margin: 0 auto
+	}
+		.left-nav-item {	
+			float: left;	
+			margin: 0 auto;
+			letter-spacing: 3px;
+			font-size: 16px;	
+			padding: 0 55px 10px 0;
+			text-align: center;
+			display: inline-block;
+		}
+		.right-nav-item {
+			float: right;			
+			margin: 0 auto;
+			letter-spacing: 3px;
+			font-size: 16px;
+			padding: 0 0 0 35px;			
+			text-align: center;
+			display: inline-block;	
+		}
+	img {		
+		padding-bottom: 10px;		
+	}
+}
+
+.split-content {
+	width: 440px;
+	float: right;
+	margin-top: 5em;
+	font-size: 11pt;
+	line-height: 2em;
+	letter-spacing: 1px;
+	#aboutmh {
+		font-size: 14pt;
+	}
+}
+
+#footer {
+	width: 980px;
+	margin: 0 auto;
+	border-top: 1px solid #D3D3D3;
+	div {
+		margin-top: 2em;
+		p {
+			color: #000;
+		}
+	}
+}
+
+.office {
+	width: 320px; 
+	float: left;
+	letter-spacing: 1px;
+	margin-bottom: 2em;
+	p.office-header {
+		font-size: 11pt;		
+		letter-spacing: 2px;
+	}	
+}
+
+#snapshot {
+	max-width: 824px;
+	div {		
+		padding: 10px 10px 0 0;
+		float: left;
+		font-size: 11pt;
+	}
+	#snapshot-to-date {
+		padding-left: 0px !important;
+	}
+	#houses {
+		padding-left: 10px !important;
+	}
+}
+
+#about-menu {
+	padding: 10px 10px 0 0;	
+	font-size: 10pt;
+	letter-spacing: 2px;
+	max-width: 800px;
+	float: left;	
+}
+
+#house-menu {
+	padding: 10px 10px 0 0;	
+	font-size: 10pt;
+	letter-spacing: 2px;
+	max-width: 800px;
+	float: left;
+}
+
+#donate {
+	color: #33CCFF; 
+	letter-spacing: 2px;
+	font-size: 14pt;
+	float: right;	
+	padding-top: 10px;
+	padding-left: 5px;
+}
+
+#social {
+	clear: both;
+	p {
+		font-size: 12pt;
+	}
+	#publications {
+		img {
+			padding-right: 5px;	
+		}
+		
+	}
+}
+
+/*** background and model ***/
+
+#background {
+	margin: 0 auto;
+	margin-top: 5em;
+	vertical-align: top;
+	width: 800px;
+	font-size: 11pt;	
+}
+
+#model {
+	margin: 0 auto;
+	margin-top: 3em;
+	vertical-align: top;
+	width: 800px;
+	font-size: 11pt; 
+}
+
+p.content-header {
+	color: #33CCFF;
+	font-size: 14pt;
+	letter-spacing: 2px;
+}
+
+.page-image {
+	width: 474px;
+	padding-top: 5em;
+	float: left;
+}
+
+/** BOARD **/
+
+.content {	
+	margin: 0 auto;
+	max-width: 800px;	
+	margin-top: 5em;
+	margin-bottom: 5em;
+	font-size: 11pt;
+	line-height: 2em;
+	letter-spacing: 1px;	
+}
+
+#jobs {
+
+}
+
+
+#logo {
+	text-align: center;
+	margin-top: 1em;
+	img {
+		margin-bottom: -1.5em;
+	}
+}
+
+/** OUR TEAM **/
+
+.staff-content {
+	margin: 0 auto;
+	max-width: 980px;	
+	margin-top: 5em;
+	margin-bottom: 5em;
+	font-size: 11pt;
+	line-height: 2em;
+	letter-spacing: 1px;	
+}
+
+.staff-row {
+	width: 980px;
+	border-bottom: 1px solid #666666;
+	.staff {
+		max-width: 135px;
+	}
+	.staff-name {
+		text-align: center;
+	}
+}
+
+.house-col {
+	max-width: 200px;
+	p {
+		text-align: center;
+		margin-bottom: -5px;
+		font-size: 12pt;
+	}
+}
+
+#houselist-content {
+	margin: 0 auto;	
+	margin-top: 5em;
+	margin-bottom: 5em;
+	font-size: 12pt;
+	line-height: 2em;
+	letter-spacing: 1px;
+	max-width: 980px;
+}
+
+#social {
+	margin-bottom: 1em;
+	float: left;
+	position: relative;
+}
+
+#publications {
+	float: left;
+}
+
+#mailing-list {
+	float: left;
+	margin-left: 6em;
+	margin-top: 1em;
+}
+
+#social-media-links {
+	float: right;
+	margin-left: 13em;	
+}
+
+li.house-nav {
+	display: inline-block;
+}

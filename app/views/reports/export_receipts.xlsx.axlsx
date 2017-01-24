@@ -1,0 +1,79 @@
+xlsx_package = Axlsx::Package.new
+wb = xlsx_package.workbook
+border_bottom = wb.styles.add_style :border => { :style => :thin, :color =>"000000", :edges => [:bottom] }
+border_right = wb.styles.add_style :border => { :style => :thin, :color =>"000000", :edges => [:right] }
+currency = wb.styles.add_style :format_code =>"$#,##0.00_)"
+wb.styles.fonts.first.sz = 10
+# large_font = wb.styles.add_style :sz => 30
+wb.add_worksheet(name: 'Total Receipts') do |sheet|
+  sheet.add_row [nil, nil, nil, 'Totals', nil, nil, nil]
+  sheet.add_row ['House', 'Recipient', 'Total', 'Address', 'City', 'State', 'Zip']
+  people = []
+  @p.receipts.where("house_id <> 84").map {|i| people << i.submitter_id}
+  people.uniq!
+  people.each do |person|
+    u = User.find(person)
+    myreceipts = @p.receipts.where("submitter_id = ?", u.id)
+    mytotal = 0
+    myreceipts.each do |receipt|
+      mytotal += receipt.amount
+    end
+    # this is weird. check out which address is the one we need on the report
+    if u.house.rent_address = nil || ""
+      u.house.rent_address = u.house.mail_address
+      u.house.rent_city = u.house.mail_city
+      u.house.rent_state = u.house.mail_state
+      u.house.rent_zip = u.house.mail_zip
+    end
+  	sheet.add_row ["House Programming:#{u.house.region}:#{u.house.city}", u.firstlast, mytotal, u.house.rent_address, u.house.rent_city, u.house.rent_state, u.house.rent_zip]
+  end
+  people = []
+  @p.receipts.where("house_id = 84").map {|i| people << i.submitter_id}
+  people.uniq!
+  people.each do |person|
+    u = User.find(person)
+    myreceipts = @p.receipts.where("submitter_id = ?", u.id)
+    mytotal = 0
+    myreceipts.each do |receipt|
+      mytotal += receipt.amount
+    end
+  	sheet.add_row ["Without Walls:#{u.mail_city}", u.firstlast, mytotal, u.house.mail_address, u.house.mail_city, u.house.mail_state, u.house.mail_zip]
+  end
+  sheet.column_widths 50, 20, 30, 10, 10, 30, 10, 20
+  sheet.row_style 0, border_bottom
+end
+# uncomment this out and figure out what's causing nil values
+
+wb.add_worksheet(name: 'Individual Receipts') do |sheet|  
+  sheet.add_row [nil, nil, nil, 'Individual Receipts', nil, nil, nil, nil]
+  sheet.add_row ['House', 'Recipient', 'Program Type', 'Program Purpose', 'Program Date', 'Program Name', 
+                'Amount', 'Link']
+  @p.receipts.where("house_id <> 84").order("submitter_id").each do |r|        
+    row = sheet.add_row ["House Programming:#{r.house.region}:#{r.house.city}", r.submitter.firstlast, 
+                        r.program.program_type.name, (r.purpose.name if r.purpose.name), r.program.date, 
+                        r.program.name, r.amount, 'link']
+    sheet.add_hyperlink :location => "http:localhost:3000/receipts/edit/#{r.id}", :ref => "H#{row.index + 1}"
+    
+  end
+  @p.receipts.where("house_id = 84").order("submitter_id").each do |r|    
+    row = sheet.add_row ["Without Walls", r.submitter.firstlast, r.program.program_type.name, 
+                        (r.purpose.name if r.purpose.name), r.program.date, r.program.name, 
+                        r.amount, 'link']
+    sheet.add_hyperlink :location => "http:localhost:3000/receipts/edit/#{r.id}", :ref => "H#{row.index + 1}"
+    
+  end
+  # sheet.column_widths 0, 0, 0, 200, 0, 0, 0, 0
+  sheet.column_widths 50, 20, 30, 30, 10, 30, 10, 20
+  sheet.row_style 0, border_bottom
+end
+
+wb.add_worksheet(name: 'Rent') do |sheet|
+  sheet.add_row ['House', 'Name On Check', 'Subsidy', 'Adjustment', 'Adj. Notes', 'Total', 'Mail To:', 'Mailing Notes']
+  @p.rents.each do |r|
+    if r.house.rent_subsidy != 0 or r.house.rent_subsidy != ""
+  		sheet.add_row [r.house.location, r.house.rent_name_on_check, r.amount, r.adjustment, r.notes, r.amount + r.adjustment.to_f, r.house.address_full, r.house.rent_instructions]
+	  end
+  end
+  sheet.column_widths 50, 30, 10, 10, 30, 15, 75, 200
+  sheet.row_style 0, border_bottom
+end

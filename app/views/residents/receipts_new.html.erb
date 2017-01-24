@@ -1,0 +1,122 @@
+<!-- yep, this is some pretty obtrusive javascript. i'm going to clean this up soon. -->
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#opened_date').datepicker({ dateFormat: "yy-mm-dd"});
+  });
+
+  $(document).ready(function(){
+	  $("div select[name='receipt[purpose_id]']").change(function() {
+	  	if($("div select[name='receipt[purpose_id]']").val() == "9" || $("div select[name='receipt[purpose_id]']").val() == "10" || $("div select[name='receipt[purpose_id]']").val() == "39") {
+	  		$(".control-group#grant-id").show();
+	  	}else{
+	  		$(".control-group#grant-id").hide();
+	  	};
+	  });	
+  });  
+</script>
+<div class="row" style="margin-top:0px;">
+	<div class="span3">
+	</div>
+	<div class="span9">
+		<div class="receipt-form" style="margin-left: -270px;">
+			<%= nested_form_for :receipt, :url => residents_receipts_create_path, :html => { :class => 'form-horizontal', :multipart => true } do |f| %>
+				<%= render 'shared/error_messages' %>
+				<%= f.hidden_field :house_id, :value => current_user.house_id%>
+				<%= link_to '< Back to Receipts', residents_receipts_path, class: 'btn btn-primary', style: 'margin-bottom: 30px;' %>
+			<section class="section-with-margin" id="basic">
+			  <fieldset>
+				<legend>Upload Receipt</legend>
+			<!-- 	<div id="brn-notification" style="text-align:left;">
+					<span style="color: red;">You currently have insufficient funds within your Birthright NEXT account.<br>This Account will no longer be available for this program.</span><br><span style="color: blue;"># of Attendees: 
+					<%# total = 0 %>
+					<%# current_user.house.receipts.where(purpose_id: 8).each do |r| %>			
+						<%# total += r.program.attended_total.to_i %>			
+					<%# end %>
+					<%#= total %>
+
+					<#% receipt_total = 0 %>
+					<#% current_user.house.programs.where("name = 'Moishe House Birthright NEXT Shabbat' AND date >= '2013-10-01' AND date <= '2013-10-30'").last.receipts.map {|i| receipt_total += i.amount.to_i} %>
+					 - Receipts: $<%#= receipt_total.round(2) %> - Remaining BRN Funds: $<%#= (150 - receipt_total.to_i).to_f %></span> 
+				</div> -->
+				<br>
+				<br>
+				<div class="row" id="receipts-new">
+					<div class="span4">
+						  <div class="control-group">
+						    <%= f.label :program_id, :class => 'control-label' %>			    
+						    <div class="controls">
+						        <%= f.collection_select :program_id, Program.where("house_id = ?", current_user.house_id).order("date DESC").limit(50), :id, :date_and_name, :class => "input-medium", :prompt => "Select a Program...", :required => true %>			        
+						    </div>			    
+						  </div>
+						  <div class="control-group">
+						    <%= f.label :description, :class => 'control-label' %>
+						    <div class="controls">
+									<%= f.text_area :description, :rows => 3, :cols => 10, :required => true%>
+						    </div>
+						  </div>		
+						  <div class="control-group">
+						    <%= f.label :submitter_id, :class => 'control-label' %>
+						    <div class="controls">
+									<%= f.hidden_field :submitter_id, :value => current_user.id%>
+									<span class="input-large uneditable-input"><%= current_user.firstlast %></span>
+						    </div>
+						  </div>			  
+						  <div class="control-group">
+						    <%= f.label :purchaser_id, "Purchaser", :class => 'control-label' %>
+						    <div class="controls">
+						        <%= f.collection_select :purchaser_id, User.where("house_id = ? and active = true", current_user.house_id).order("first_name, last_name"), :id, :firstlast, 
+						          :selected => "#{current_user.id}" %>
+						    </div>
+						  </div>			  
+						  <div class="control-group">
+						    <%= f.label :amount, :class => 'control-label' %>
+						    <div class="controls">
+							  	<div class="input-prepend">
+						        <span class="add-on">$</span>
+						      	<%= f.text_field :amount, :class => 'input-small', :required => true %>
+							  	</div>
+						    </div>
+						  </div>			  
+						  <div class="control-group">
+						  	<%= f.label :purpose_id, "Budget", :class => 'control-label' %>
+					  		<div class="controls">
+					  			<% if current_user.role == "resident" %>
+					  			<%= f.collection_select :purpose_id, Purpose.where("id IN(1,9,10,39,2,5,6,3,8,4,44)"), :id, :name, :required => true %>
+					  			<% else %>
+					  			<%= f.collection_select :purpose_id, Purpose.all, :id, :name, :required => true %>
+					  			<% end %>
+					  		</div>
+					  	</div>
+
+						  <div class="control-group" id="grant-id" style="display:none;">
+						    <%= f.label :grant_id, :class => 'control-label' %>
+						    <div class="controls">
+						        <%= f.collection_select :grant_id, Grant.where("expires > ?", Date.today).order("name"), :id, :name, :prompt => "Select a grant..." %>
+						    </div>
+						  </div>			  	  			  
+					</div>
+					<div class="span3 offset1">
+						<div class="receipt-image">
+						    <ul class="thumbnails">
+							  <li class="span2 offset3">				    
+							    <h3>Upload Image</h3>				    
+								  <p class="text-center">
+									<%= f.file_field :receipt %>						
+								  </p>				    
+							  </li>
+							</ul>
+						</div>
+					</div>
+				</div>	<! -- end of receipts div -->
+			</fieldset>
+		</section>
+		<fieldset>	
+		  <div class="form-actions">
+		    <%= f.submit "Upload Receipt", :class => 'btn btn-large btn-block btn-primary' %>
+		    <%= link_to "Cancel", residents_receipts_path, :class => 'btn btn-large btn-block' %>
+		  </div>
+		</fieldset>
+		</div>
+	</div>
+</div>
+<% end %>

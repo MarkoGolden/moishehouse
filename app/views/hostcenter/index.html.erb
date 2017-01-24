@@ -1,0 +1,19 @@
+<div class="hero-unit" style="margin-top:-20px;">
+  <h1>Mintranet v2.0</h1>
+  <p>Inspiring Vibrant Jewish Communities For Young Adults</p>
+</div>
+<% if user_signed_in? and current_user.role = "mhwow" %>
+	<div class="row-fluid mhwow">
+	  <div class="span4 offset4">
+			<a href="/host_center/my_programs" class="btn btn-large btn-block btn-primary">My Programs</a>
+			<a href="/residents/myinfo" class="btn btn-large btn-block btn-primary">My Info</a>
+			<!-- <a href="/residents/upcoming_programs" class="btn btn-large btn-block btn-primary">Upcoming MHWOW Programs</a> -->
+			<a href="/host_center/register_program" class="btn btn-large btn-block btn-primary">Register a Program</a>
+			<a href="/host_center/receipts_new" class="btn btn-large btn-block btn-primary">Upload Receipts</a>
+			<a href="/host_center/scholarship_form" class="btn btn-large btn-block btn-primary">Scholarship Form</a>
+			<a href="/mhwow/guidelines" class="btn btn-large btn-block btn-primary">Guidelines & Policies</a>		
+			<!-- <a href="/mhwow/program-ideas" class="btn btn-large btn-block btn-primary">Program Ideas</a> -->
+			<!-- <a href="/mhwow/help" class="btn btn-large btn-block btn-primary">Help</a>		   -->
+		</div>
+	</div>
+<% end %>

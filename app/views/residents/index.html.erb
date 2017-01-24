@@ -1,0 +1,18 @@
+<div class="hero-unit" style="margin-top: -20px;">
+  <h1>Mintranet v2.0</h1>
+  <p>Inspiring Vibrant Jewish Communities For Young Adults</p>
+</div>
+<% if user_signed_in? and current_user.role = "resident" %>
+	<div class="row-fluid">
+	  <div class="span4 offset4">
+			<a href="/residents/myinfo" class="btn btn-large btn-block btn-primary">My Info</a>
+			<a href="/residents/programs" class="btn btn-large btn-block btn-primary">Programs</a>
+			<a href="/residents/receipts" class="btn btn-large btn-block btn-primary">Receipts</a>
+			<a href="/residents/budget" class="btn btn-large btn-block btn-primary">View Budget</a>		
+			<a href="/residents/contacts" class="btn btn-large btn-block btn-primary">Contact List</a>
+			<a href="#" class="btn btn-large btn-block btn-primary">Resources</a>
+		  <div class="span4">
+		  </div>
+		</div>
+	</div>
+<% end %>

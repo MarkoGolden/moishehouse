@@ -1,0 +1,32 @@
+	<%= form_tag(rents_submit_path) %>
+	<%= hidden_field_tag("payperiod_id", current_pay_period.id)%>
+	<p class="pull-right">
+		<br />
+	<%= submit_tag "Closeout - Pay Period #{current_pay_period.date.strftime("%m/%d/%y")}", :class => "btn btn-large btn-primary" %>
+	</p>
+<header class="jumbotron subhead" id="overview">
+  <div class="container">
+    <h1>Closeout <%= "#{current_pay_period.date.strftime("%m/%d/%y")}"%></h1>
+    <p class="lead">Click the button to closeout both receipts and rent at the same time.</p>
+  </div>
+</header>
+<table class="table table-condensed">
+  <thead>
+    <tr>
+      <th>House</th>
+      <th>Subsidy</th>
+      <th>Adjustments</th>
+      <th>Notes on Adjustments</th>
+    </tr>
+  </thead>
+  <tbody>
+	    <% @houses.each do |house| %>
+	      <tr>
+	        <td><%= house.location %></td>
+	        <td><%= hidden_field_tag("houses[" + house.id.to_s + "[amount]]", house.rent_subsidy.to_s)%><%= number_to_currency(house.rent_subsidy) %></td>
+	        <td><%= number_field_tag("houses[" + house.id.to_s + "[adjustment]]")%></td>
+	        <td><%= text_field_tag("houses[" + house.id.to_s + "[notes]]")%><%= hidden_field_tag("houses[" + house.id.to_s + "[house_id]]", house.id.to_s)%></td>
+	      </tr>
+	    <% end %>
+  </tbody>
+</table>

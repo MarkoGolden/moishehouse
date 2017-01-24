@@ -1,0 +1,94 @@
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#opened_date').datepicker({ dateFormat: "yy-mm-dd"});
+  });  
+</script>
+
+<header class="jumbotron subhead" id="overview">
+  <div class="container">
+	<h2>Edit Program</h2>    
+  </div>
+</header>
+<legend style="margin-bottom: 15px;">Program Details</legend>
+<%= nested_form_for @program, :url => host_center_programs_update_path, :html => { :class => 'form-horizontal'} do |f| %>
+	<%= hidden_field_tag :program_id, @program.id %>
+<section class="section-with-margin" id="basic">
+		<div class="row">
+			<div class="span7">
+			  <div class="control-group">
+			    <%= f.label :program_type_id, :class => 'control-label' %>
+			    <div class="controls">
+			      <%= f.collection_select :program_type_id, @program_types, :id, :name, :class => 'input-large', :prompt => "Select a program type..." %>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <%= f.label :date, :class => 'control-label' %>
+			    <div class="controls">
+			      <%= f.text_field :date, :class => 'input-large', :id => 'opened_date' %>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <%= f.label :time, :class => 'control-label' %>
+			    <div class="controls">
+			      <%= f.text_field :time, :class => 'input-large' %>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <%= f.label :name, 'Program name', :class => 'control-label' %>
+			    <div class="controls">
+			        <%= f.text_field :name, :class => 'input-large', :placeholder => "What is the name of your program?"%>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			  	<%= f.label :photos, "Photos", :class => 'control-label' %>
+			  	<div class="controls">
+			  		<td class="td-align-center"><a href="/programs/<%=@program.id%>/upload_photos">Photos</a></td>
+			  	</div>
+			  </div>
+			  <div class="control-group">
+			    <%= f.label :expected_attendance, :class => 'control-label' %>
+			    <div class="controls">
+			      <%= f.text_field :expected_attendance, :class => 'input-large', :style => "width: 20px;", :placeholder => 0  %>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <%= f.label :buying, "What do you plan on buying for this program?", :class => 'control-label' %>
+			    <div class="controls">
+			      <%= f.text_area :buying, :class => 'input-large', :size => "5x5" %>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <%= f.label :description, "Please Provide A Summary Of Your Program And A Brief Explanation Of How You Believe It Will Contribute To A Vibrant Jewish Community", :class => 'control-label' %>
+			    <div class="controls">
+			      <%= f.text_area :description, :class => 'input-large', :size => "5x5" %>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			  	<%= f.label :participants, "Participants", :class => 'control-label' %>
+			  	<div class="controls">
+			  		<%= f.text_area :participants, :class => 'input-large', :size => '5x5' %>
+			  	</div>
+			  </div>
+			</div>
+			  <div class="span3 offset1">
+				 	<div class="program-image" style="margin-top: -10px;">
+				 		<h3>Upload Photos</h3>
+					  
+					  	
+				  	</div>
+				  </div>			  
+</section>
+<fieldset>
+	<legend>Save</legend>
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-large btn-block btn-primary' %>
+    <%= link_to "Cancel", host_center_my_programs_path, :class => 'btn btn-large btn-block' %>
+  </div>
+</fieldset>
+<fieldset>
+	<legend>Delete</legend>
+  <div class="form-actions">    
+    <%= link_to "Delete Program", "/residents/programs_destroy/" + @program.id.to_s, :method => :delete, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, :class => 'btn btn-large btn-danger btn-block' %>
+  </div>
+</fieldset>
+<% end %>

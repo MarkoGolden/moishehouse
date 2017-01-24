@@ -1,0 +1,22 @@
+xlsx_package = Axlsx::Package.new
+wb = xlsx_package.workbook
+border_bottom = wb.styles.add_style :border => { :style => :thin, :color =>"000000", :edges => [:bottom] }
+border_right = wb.styles.add_style :border => { :style => :thin, :color =>"000000", :edges => [:right] }
+currency = wb.styles.add_style :format_code =>"$#,##0.00_)"
+wb.styles.fonts.first.sz = 10
+
+wb.add_worksheet(name: 'Individual Receipts') do |sheet|
+  sheet.add_row ['House', 'Recipient', 'Program Type', 'Program Purpose', 'Program Date', 'Program Name', 'Amount', 'Link']
+  @p.receipts.where("house_id <> 84").order("submitter_id").each do |r|        
+  	row = sheet.add_row ["House Programming:#{r.house.region}:#{r.house.city}", r.submitter.firstlast, r.program.program_type.name, (r.purpose.name if r.purpose.name), r.program.date, r.program.name, r.amount, 'link']
+    sheet.add_hyperlink :location => "http:localhost:3000/receipts/edit/#{r.id}", :ref => "H#{row.index + 1}"
+    
+  end
+  @p.receipts.where("house_id = 84").order("submitter_id").each do |r|    
+  	row = sheet.add_row ["Without Walls", r.submitter.firstlast, r.program.program_type.name, (r.purpose.name if r.purpose.name), r.program.date, r.program.name, r.amount, 'link']
+    sheet.add_hyperlink :location => "http:localhost:3000/receipts/edit/#{r.id}", :ref => "H#{row.index + 1}"
+    
+  end
+  sheet.column_widths 50, 20, 30, 30, 10, 30, 10, 20
+  sheet.row_style 0, border_bottom
+end

@@ -1,0 +1,88 @@
+<script type="text/javascript">
+  $(function() {
+    $( document ).tooltip();
+  });
+</script>  
+
+  <p class="pull-right">
+		<br />    
+    <%= link_to "Create New Program", "/residents/programs_new", :class => 'btn btn-large btn-primary' %>    
+	</p>
+
+<header class="jumbotron subhead" id="overview">
+  <div class="container">
+	<h1>Programs</h1>
+    <p class="lead">Create a new program or view program histories</p>
+  </div>
+</header>
+<ul class="nav nav-pills">
+      <li<%=raw " class=\"active\"" if @daysago == 30 %>><a href="?daysago=30">Last 30 Days</a></li>
+      <li<%=raw " class=\"active\"" if @daysago == 60 %>><a href="?daysago=60">Last 60 Days</a></li>
+      <li<%=raw " class=\"active\"" if @daysago == 180 %>><a href="?daysago=180">Last 180 Days</a></li>
+      <li<%=raw " class=\"active\"" if @daysago == 365 %>><a href="?daysago=365">Last Year</a></li>
+    </ul>
+<fieldset>
+	<legend>Programs</legend>
+	  <table class="table table-striped" style='table-layout:fixed; width: 100%'>
+    <thead>
+      <tr>
+        <th class="td-align-center">Date</th>
+        <th class="td-align-center">Name</th>        
+        <th class="td-align-center">Description</th>        
+        <th class="td-align-center">Complete</th>
+        <th class="td-align-center">Partner</th>
+        <th>Photos</th>        
+        <th class="td-align-center">Receipts</th>
+        <th class="td-align-center">Controls</th>
+      </tr>
+    </thead>
+    <tbody>      
+        <% current_user.house.programs.where("date > ?", @daysago.days.ago).order("date DESC").each do |p| %>      
+        <%# look into date.nil issue %>      
+          <tr>
+            <% if !p.date.nil? %>
+              <td class="td-align-center"><%= p.date.strftime("%D") %></td>
+            <% else %>
+              <td class="td-align-center">N/A</td>
+            <% end %>
+
+            <td class="td-align-center" style="width: 100px;"><%= p.name %></td>            
+            <td class="td-align-center" style="max-width: 300px;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;"><%= p.description %></td>            
+                                  
+            <% if p.date.past? %>
+              <td class="td-align-center"><img src="/assets/greencheck.png" style="margin-left: 15px;"/></td>
+            <% else %>
+              <td class="td-align-center"></td>
+            <% end %>
+
+            <% if p.partner != nil %>
+            <td class="td-align-center" id="partner"><img src="/assets/greencheck.png" style="margin-left: 15px;" title="<%=p.partner%>" /></td>
+            <% else %>
+              <td></td>
+            <% end %>
+            
+            
+            <td class="td-align-center"><a href="/programs/<%=p.id%>/upload_photos">Upload</a></td>
+            
+            <% if p.receipts.count == 0 %>
+              <td class="td-align-center"><%= link_to 'Add Receipts', residents_receipts_new_path, :class => 'btn btn-primary' %></td>
+            <% else %>
+              <td class="td-align-center" style="width: 150px;"><% p.receipts.each do |r|%> <%=link_to number_to_currency(r.amount).to_s, "/residents/receipts_edit/#{r.id}", :class => r.button_color %><% end %>
+                <%=link_to '', residents_receipts_new_path, :class => "icon-white icon-plus-sign", style: 'font-size:20px;text-decoration: none;margin-left:2px;' %>
+              </td>            
+            <% end %>
+            <td>
+              <% if 6.months.ago < p.date %>
+              <%= link_to "Edit",
+                          "/residents/programs_edit/#{p.id}", :class => 'btn btn-medium' %>
+              <% end %>
+              <%# if Date.today < p.date %>
+              <%= link_to "Delete",
+                          "/residents/programs_destroy/#{p.id}", :class => 'btn btn-medium btn-danger' %>
+              <%# end %>
+            </td>
+          </tr>                
+      <% end %>
+    </tbody>
+  </table>
+</fieldset>

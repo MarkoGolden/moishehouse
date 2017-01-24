@@ -1,0 +1,27 @@
+xlsx_package = Axlsx::Package.new
+wb = xlsx_package.workbook
+border_bottom = wb.styles.add_style :border => { :style => :thin, :color =>"000000", :edges => [:bottom] }
+border_right = wb.styles.add_style :border => { :style => :thin, :color =>"000000", :edges => [:right] }
+currency = wb.styles.add_style :format_code =>"$#,##0.00_)"
+wb.styles.fonts.first.sz = 10
+large_font = wb.styles.add_style :sz => 30
+
+wb.add_worksheet(name: 'Activity') do |sheet|	
+  # sheet.add_row [nil, nil, nil,'Individual Receipts', 650, nil, nil, nil], style: [nil, nil, nil, large_font, nil, nil, nil, nil]
+  sheet.add_row ['Date', 'House', 'Program', 'MHWOW Host', 'Status', 'Attended', 'Partner(s)']  
+    @mhwow_programs_excel.each do |r|
+  	  row = sheet.add_row [r.date, "#{User.find(r.submitter_id).mail_city}, #{User.find(r.submitter_id).mail_state}", r.name, 
+                          "#{User.find(r.submitter_id).firstlast}", 'Approved', r.attended_total, r.partner]                          
+      # sheet.add_hyperlink :location => "http:localhost:3000/receipts/edit/#{r.id}", :ref => "H#{row.index + 1}"
+    end      
+  # @r.receipts.where("house_id = 84").order("submitter_id").each do |r|    
+  # 	row = sheet.add_row ["Without Walls", r.submitter.firstlast, r.program.program_type.name, 
+  #                       (r.purpose.name if r.purpose.name), r.program.date, r.program.name, 
+  #                       r.amount, 'link']
+  #   sheet.add_hyperlink :location => "http:localhost:3000/receipts/edit/#{r.id}", :ref => "H#{row.index + 1}"
+    
+  # end
+  # sheet.column_widths 0, 0, 0, 200, 0, 0, 0, 0
+  sheet.column_widths 10, 10, 10, 10, 10, 10, 20
+  sheet.row_style 0, border_bottom
+end

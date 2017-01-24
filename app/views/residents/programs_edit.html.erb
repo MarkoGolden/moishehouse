@@ -1,0 +1,163 @@
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#opened_date').datepicker({ dateFormat: "yy-mm-dd"});
+  });  
+
+  $(document).ready(function(){
+  	$(".controls#direct-service").on('click',"input[type=checkbox]", function() {
+	  	if(this.checked){
+	  		alert("WHAT IS DIRECT SERVICE? A program whose central activity is volunteering one's time and energy to provide concrete services meeting the needs of a vulnerable population. This is different than advocacy and education, which are also valuable components to Repair the World programs.")	
+	  	};
+  	});	
+  });
+
+  $(document).ready(function(){
+  	$(".controls#partnership").on('click',"input[type=checkbox]", function() {
+	  	if(this.checked){
+	  		$("#partner").show();
+	  	}else{
+	  		$("#partner").hide();
+	  	};
+	  });	
+  });
+
+  $(document).ready(function(){
+	  $("div select[name='program[program_type_id]']").change(function() {
+	  	if($("div select[name='program[program_type_id]']").val() == "3"){
+	  		$(".control-group#direct-service").show();
+	  	}else{
+	  		$(".control-group#direct-service").hide();
+	  	};
+	  });	
+  });
+
+  $(document).ready(function(){
+  	$(".control-group#direct-service").on('click',"input[type=checkbox]", function() {
+	  	if(this.checked){
+	  		$(".control-group#direct-service").show();
+	  	}else{
+	  		$(".control-group#direct-service").hide();
+	  	};
+	  });	
+  });
+</script>
+
+<header class="jumbotron subhead" id="overview">
+  <div class="container">
+	<h2>Edit Program</h2>    
+  </div>
+</header>
+<legend style="margin-bottom: 15px;">Program Details</legend>
+<%= nested_form_for @program, :url => residents_programs_update_path, :html => { :class => 'form-horizontal'} do |f| %>
+<section>
+	<%=f.hidden_field :id, :value => @program.id%>
+	<div class="row">
+		<div class="span5">
+			<div class="control-group">
+			    <%= f.label :date, :class => 'control-label' %>
+			    <div class="controls">
+			      <%= f.text_field :date, :class => 'input-small', :id => 'opened_date', :required => true %>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <%= f.label :name, :class => 'control-label' %>
+			    <div class="controls">
+			        <%= f.text_field :name, :class => 'input-large'%>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <%= f.label :description, :class => 'control-label' %>
+			    <div class="controls">
+					<%= f.text_area :description, :rows => 3, :cols => 10%>
+			    </div>
+			  </div>			
+			  <div class="control-group">
+			  	<%= f.label :photos, "Photos", :class => 'control-label' %>
+			  	<div class="controls">
+			  		<td class="td-align-center"><a href="/programs/<%=@program.id%>/upload_photos">Photos</a></td>
+			  	</div>
+			  </div>		  
+			  <div class="control-group">
+			    <%= f.label :program_type_id, :class => 'control-label' %>
+			    <div class="controls">
+			      <%= f.collection_select :program_type_id, ProgramType.all, :id, :name, :class => 'input-large' %>
+			    </div>
+			  </div>	
+			  <div class="control-group">			  	
+			    <%= f.label :submitter_id, :class => 'control-label' %>
+			    <div class="controls">
+			      <%= f.hidden_field :submitter_id, :value => @program.submitter_id%>
+						<span class="input-large uneditable-input"><%= @submitter %></span>
+			    </div>
+			  </div>		  
+			  <div class="control-group">
+			    <%= f.label :partnership, :class => 'control-label' %>
+			    <div class="controls" id="partnership">
+			    	
+			      <%= f.check_box :partnership%>			      
+			    </div>
+			  </div>
+			  <div class="control-group" id="partner" style="display:none;">
+				    <%= f.label :partner, :class => 'control-label' %>
+				    <div class="controls">			    	
+				      <%= f.text_field :partner, :class => 'input-large' %>			      
+				    </div>
+				  </div>			  
+			  
+			  <div class="control-group" id="direct-service">
+			    <%= f.label :direct_service, :class => 'control-label' %>
+			    <div class="controls" id="direct-service">
+			      <%= f.check_box :direct_service%>
+			    </div>
+			  </div>
+			  
+			  <div class="control-group">
+			    <%= f.label :attended_total, "Total Attendees", :class => 'control-label' %>
+			    <div class="controls">
+			      <%= f.text_field :attended_total, :class => 'input-large', :style => "width: 20px;", :placeholder => 0  %>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <%= f.label :attended_residents, "Residents", :class => 'control-label' %>
+			    <div class="controls">
+			      <%= f.text_field :attended_residents, :class => 'input-large', :style => "width: 20px;", :placeholder => 0  %>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <%= f.label :attended_new, "First-Timers", :class => 'control-label' %>
+			    <div class="controls">
+			      <%= f.text_field :attended_new, :class => 'input-large', :style => "width: 20px;", :placeholder => 0 %>
+			    </div>
+			  </div>
+
+			</div>			  
+			  
+			</div>
+			  <!-- <div class="span3 offset1">
+				 	<div class="program-image" style="margin-top: -10px;">
+				 		<h3>Upload Photos</h3>
+					  <%#= f.fields_for :attachments do |attachment_form|  %>				  			  
+						  <ul class="thumbnails">
+						  <li class="span2 offset3">				    
+						    
+					  		<%#= attachment_form.file_field :file, :multiple => true %>
+					  		<%#= attachment_form.link_to_remove "Remove this attachment" %>			  
+					  	<%# end %>			  				  	
+					  	<%#= f.link_to_add "Add photos", :attachments %>
+				  	</div>
+				  </div>	 -->		  
+</section>
+<fieldset>
+	<legend>Save</legend>
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-large btn-block btn-primary' %>
+    <%= link_to "Cancel", residents_programs_path, :class => 'btn btn-large btn-block' %>
+  </div>
+</fieldset>
+<fieldset>
+	<legend>Delete</legend>
+  <div class="form-actions">    
+    <%= link_to "Delete Program", "/residents/programs_destroy/" + @program.id.to_s, :method => :delete, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, :class => 'btn btn-large btn-danger btn-block' %>
+  </div>
+</fieldset>
+<% end %>

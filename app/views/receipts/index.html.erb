@@ -1,0 +1,93 @@
+<script>
+  $('#myTabs a[data-toggle="tab"]').click(function (e) {
+    e.preventDefault();
+    $(this).tab('show');
+  })
+</script>
+
+<header class="jumbotron subhead" id="overview">
+  <div class="container">
+    <h1>Receipts</h1>
+    <p class="lead">Reimburse, rinse, repeat</p>
+  </div>
+</header>
+<div class="tab-content">
+  <section class="tab-pane active" id="residents">
+	<div class="row">
+		<div class="span3">
+				<form method="get" action="/receipts">
+					<%= select_tag 'house_id', options_from_collection_for_select(House.where("id NOT IN (11,84)").order("city, state"), :id, :location, :selected => params[:house_id]), :prompt => "All Houses"%>
+					<%= select_tag 'payperiod_id', options_from_collection_for_select(Payperiod.where("locked_rent = true").order("date desc"), :id, :date, :selected => params[:payperiod_id]), :prompt => "All PayPeriods"%>
+				  <p>
+				    <%= text_field_tag :search, params[:search] %>
+				    <%= submit_tag "Search", :name => nil %>
+				  </p>
+
+					<input class="btn btn-primary" type="submit" value="filter" />				
+				</form>
+		</div>
+	<div class="span9">
+		<ul class="nav nav-pills">
+		  <li<%=raw " class=\"active\"" if @daysago == 10 %>><a href="?<%= "house_id=" + params[:house_id] + "&" if params[:house_id]%>daysago=10">Last 10 Days</a></li>
+		  <li<%=raw " class=\"active\"" if @daysago == 30 %>><a href="?<%= "house_id=" + params[:house_id] + "&" if params[:house_id]%>daysago=30">Last 30 Days</a></li>
+		  <li<%=raw " class=\"active\"" if @daysago == 60 %>><a href="?<%= "house_id=" + params[:house_id] + "&" if params[:house_id]%>daysago=60">Last 60 Days</a></li>
+		  <li<%=raw " class=\"active\"" if @daysago == 365 %>><a href="?<%= "house_id=" + params[:house_id] + "&" if params[:house_id]%>daysago=365">Last Year</a></li>
+		</ul>
+		<table class="table table-striped">
+		  <thead>
+		    <tr>
+		      <th>Submitted</th>
+		      <th>Program Date</th>
+		      <th>Amount</th>
+		      <th>Program</th>
+		      <th>Status</th>			  
+		    </tr>
+		  </thead>
+		  <tbody>
+			<% @houses.each do |house| %>	
+				<tr class="warning">
+					<td colspan="7" style="text-align:center; text-weight:bold; font-size:14px;">
+						<h2><%= house.location %></h2>
+						<% 
+						#definitely refactor this, this is sloppy as fuck
+						house_budget_total = 0
+						brn_total = 0
+						total_approved = 0 %>									
+						<% if params[:payperiod_id] && params[:payperiod_id] != "" %>
+							<% @search = house.receipts.where("payperiod_id = ?", params[:payperiod_id]).order("submit_date desc") %>
+						<% elsif params[:daysago] %>							
+							<% @search = house.receipts.where("submit_date > ?", @daysago.days.ago).order("submit_date desc") %>
+						<% else %>
+							<% @search = house.receipts.order("submit_date desc") %>													
+						<% end %>
+						<% @search.each do |receipt| 
+							house_budget_total += receipt.amount if receipt.status == "2" && receipt.purpose_id == 1
+							brn_total += receipt.amount if receipt.status == "2" && receipt.purpose_id == 7 
+							total_approved += receipt.amount if receipt.status == "2" %>
+						<% end	%>
+						 &nbsp;&nbsp;(House Budget Total: <%=number_to_currency(house_budget_total) %>)
+						 &nbsp;&nbsp;(BRN Total: <%=number_to_currency(brn_total) %>)
+						 &nbsp;&nbsp;(Total Approved: <%=number_to_currency(total_approved) %>)
+					</td>
+				</tr>
+			  <% @search.each do |receipt| %>
+			  <% if receipt.program != nil && receipt.submitter != nil %>
+			  <tr class="<%=receipt.row_color%>">
+		        <td width="80px;"><%= receipt.submit_date.to_datetime.strftime("%m/%-d/%Y") %></td>
+		        <td width="80px;"><%= receipt.program.date.to_datetime.strftime("%m/%-d/%Y") %></td> 
+				<td><h3><%= number_to_currency(receipt.amount) %></h3></td>
+		        <td width="400px;"><%= receipt.program.name %><br /><%= receipt.description %><br />Submitted by: <%= receipt.submitter.firstlast%></td>		        
+		        <td>
+		          <%= link_to receipt.status_name_html.html_safe,
+		                      "/receipts/edit/#{receipt.id}" %><br />
+		        </td>
+		      </tr>
+			  <% end %>
+		    <% end %>
+		    <% end %>
+		  </tbody>
+		</table>
+	</div>
+	</div>
+  </section>
+</div>

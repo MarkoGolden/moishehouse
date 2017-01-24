@@ -1,0 +1,131 @@
+<script>
+  $('#myTabs a[data-toggle="tab"]').click(function (e) {
+    e.preventDefault();
+    $(this).tab('show');
+  })
+</script>
+	<p class="pull-right">
+		<br />
+		<%= link_to "Create New House", new_house_path, :class => 'btn btn-large btn-primary' %>
+	</p>
+<header class="jumbotron subhead" id="overview">
+  <div class="container">
+    <h1>Houses</h1>
+    <p class="lead">This is where the magic happens.</p>
+  </div>
+</header>
+<div id="myTabs" class="container">
+	<ul class="nav nav-tabs">
+		<% first = true%>
+		<% @regions.each do |r| %>
+	    <li<% if first %> class="active"<% first = false%><% end %>><a href="#<%=r[:region].downcase.gsub(" ", "")%>" data-toggle="tab"><%=r[:region]%></a></li>
+		<% end %>
+	    <li><a href="#rsj" data-toggle="tab">RSJ</a></li>		
+	    <li><a href="#inactive" data-toggle="tab">Inactive</a></li>		
+	    <li><a href="#all" data-toggle="tab">All</a></li>		
+	</ul>		
+</div>
+<div class="tab-content">
+	<% first = true%>
+	<% @regions.each do |r| %>
+		<section class="tab-pane<% if first %> active<% first = false%><% end %>" id="<%=r[:region].downcase.gsub(" ", "")%>">
+		  <table class="table table-condensed">
+		    <thead>
+		      <tr>
+		        <th width="600px;">Location</th>
+		        <th>Actions</th>
+		      </tr>
+		    </thead>
+		    <tbody>
+			<% houses = House.where("region = ?", r.region).order("city")%>
+			<% houses.each do |house| %>
+		        <tr>
+		          <td><%= house.location %></td>
+		          <td>
+		          		<%= link_to "Edit", edit_house_path(house), :class => 'btn btn-large' %>
+		          </td>		          
+		        </tr>
+		      <% end %>
+		    </tbody>
+		  </table>
+		  </tbody>
+		</table>
+		</section>
+	<% end %>
+		<section class="tab-pane" id="rsj">
+		  <table class="table table-condensed">
+		    <thead>
+		      <tr>
+		        <th width="600px;">Location</th>
+		        <th>Actions</th>
+		      </tr>
+		    </thead>
+		    <tbody>
+			<% houses = House.where("rsj = true").order("city")%>
+			<% houses.each do |house| %>
+		        <tr>
+		          <td><%= house.location %></td>
+		          <td>
+		          		<%= link_to "Edit", edit_house_path(house), :class => 'btn btn-large' %>
+		          </td>
+		        </tr>
+		      <% end %>
+		    </tbody>
+		  </table>
+		  </tbody>
+		</table>
+		</section>
+		<section class="tab-pane" id="inactive">
+		  <table class="table table-condensed">
+		    <thead>
+		      <tr>
+		        <th width="600px;">Location</th>
+		        <th>Actions</th>
+		      </tr>
+		    </thead>
+		    <tbody>
+			<% houses = House.where("active = false").order("city")%>
+			<% houses.each do |house| %>
+		        <tr>
+		          <td><%= house.location %></td>
+		          <td>
+		          		<%= link_to "Edit", edit_house_path(house), :class => 'btn btn-large' %>
+		          </td>
+		        </tr>
+		      <% end %>
+		    </tbody>
+		  </table>
+		  </tbody>
+		</table>
+		</section>
+		<section class="tab-pane" id="all">
+		  <table class="table table-condensed">
+		    <thead>
+		      <tr>
+		        <th width="600px;">Location</th>
+		        <th>Actions</th>
+		      </tr>
+		    </thead>
+		    <tbody>
+			<% @houses_active.each do |house| %>
+		    <tr>		        	
+		      <td><%= house.location %></td>		        	
+    			<td>
+      			<%= link_to "Edit", edit_house_path(house), :class => 'btn btn-large' %>
+      		</td>		          
+      	</tr>
+      <% end %>
+		  <% @houses_inactive.each do |house| %>
+		  	<tr>
+		     	<td><%= "#{house.location} - Inactive" %></td>
+		      <td>
+      			<%= link_to "Edit", edit_house_path(house), :class => 'btn btn-large' %>
+      		</td>		            
+		     </tr>
+		  <% end %>
+		    </tbody>
+		  </table>
+		  </tbody>
+		</table>
+		</section>
+

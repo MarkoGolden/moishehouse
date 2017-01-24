@@ -1,0 +1,2 @@
+module HostcenterHelper
+end

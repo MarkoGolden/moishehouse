@@ -1,0 +1,33 @@
+<% form_for @program, :html => {:multipart => true} do |f| %>
+
+<%= f.error_messages %>
+
+<%= f.label :title %>
+<%= f.text_field :title %>
+
+<%= f.label :departure, "Departure Date"%>
+<%= f.date_select :departure %>
+
+<%= f.label :description %>
+<%= f.text_area :description %>
+
+<%= f.label :price %>
+<%= f.text_field :price %>
+
+<% f.fields_for :trip_images do |builder| %>
+
+	<% if builder.object.new_record? %>
+
+	<%= builder.label :caption, "Image Caption" %>
+	<%= builder.text_field :caption %>
+
+	<%= builder.label :photo, "Image File" %>
+	<%= builder.file_field :photo %>
+
+	<% end %>
+
+<% end %>
+
+<%= f.submit "Submit" %>
+
+<% end %>

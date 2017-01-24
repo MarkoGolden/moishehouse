@@ -1,0 +1,134 @@
+<script type="text/javascript">
+    $(function () {
+        $('#js-news').ticker();
+    });
+    
+	function MM_swapImgRestore() { //v3.0
+	  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+	}
+	function MM_preloadImages() { //v3.0
+	  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+	    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+	    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+	}
+	function MM_findObj(n, d) { //v4.01
+	  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+	    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+	  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+	  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+	  if(!x && d.getElementById) x=d.getElementById(n); return x;
+	}
+	function MM_swapImage() { //v3.0
+	  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+	   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+	}
+	var preload_ctrl_images=false;
+	var previmg='left.gif';
+	var stopimg='stop.gif';
+	var playimg='play.gif';
+	var nextimg='right.gif';
+
+	var slides0=[]; //FIRST SLIDESHOW
+	<% Asset.limit(10).each_with_index do |a,i| %>
+		slides0[<%= i %>] = ["<%=a.photo.url%>", ""];	
+	<% end %>
+	
+	slides0.desc_prefix=''; //string prefix for image descriptions display
+	slides0.controls_top=0; //use for top controls
+	slides0.no_controls=1;
+	slides0.counter=0; //use to show image count
+	slides0.width=545; //use to set width of widest image if dimensions vary
+	slides0.height=378; //use to set height of tallest image if dimensions vary
+	slides0.no_auto=0; //use to make show completely user operated (no play button, starts in stopped mode)
+	slides0.use_alt=1; //use for descriptions as images alt attributes
+	slides0.use_title=0; //use for descriptions as images title attributes
+	slides0.nofade=0; //use for no fade-in, fade-out effect for this show
+	slides0.border=0; //set border width for images
+	slides0.border_color='lightblue'; //set border color for images
+	</script>
+	<%= javascript_include_tag "swissarmy.js" %>
+	
+	<script language="JavaScript" type="text/javascript" src="includes/subnavnew.js"></script>
+	</head>
+	
+	<script type='text/javascript'>
+	//<![CDATA[ 
+	$(function(){
+	$(".fancybox")
+	    .attr('rel', 'gallery')
+	    .fancybox({
+	        padding : 0
+	    });
+	});//]]>
+	</script>
+</script>
+
+<title>Moishe House - Home</title>
+<div id="snapshot">	
+	<div id="snapshot-to-date" style="font-size: 11pt;">
+		2013 Snapshot-To-Date
+	</div>
+	<div id="houses">
+		HOUSES <strong><%= @houses.count %></strong>
+	</div>
+	
+	<div id="countries">
+		COUNTRIES <strong>13</strong>
+	</div>
+	
+	<div id="programs">
+		PROGRAMS <strong><%= @mhwebsiteprograms.count %></strong>
+	</div>
+	
+	<div id="attendees">		
+		ATTENDEES <strong><%= get_attendees(@mhwebsiteprograms) %></strong>
+	</div>
+	
+	<div id="first-timers">					
+		1ST TIMERS <strong><%= get_first_timers(@mhwebsiteprograms) %></strong>
+	</div>
+</div>
+
+<div id="slideshow" style="display:block; float:left; width:500px;">
+	<table cellspacing="0" cellpadding="0" style="width:; border:0px; padding:0px;" border="0">
+<tr><td colspan="4" style="padding:0px 0px 6px 0px; width:500px;">
+<a href="http://www.moishehouse.org/images/HomeSlides/1.png" target="_self" class="fancybox" rel="gallery">
+<script type="text/javascript">new inter_slide(slides0)</script></a></td></tr>
+<tr><td style="padding:6px 0px 0px 0px; width:124px; height:98px; text-align:left;">
+<script type="text/javascript">new inter_slide(slides1)</script></td>
+<td style="padding:6px 0px 0px 16px; width:124px; height:98px; text-align:right;">
+<script type="text/javascript">new inter_slide(slides2)</script></td>
+<td style="padding:6px 0px 0px 16px; width:124px; height:98px; text-align:right;">
+<script type="text/javascript">new inter_slide(slides3)</script></td>
+<td style="padding:6px 0px 0px 16px; width:124px; height:98px; text-align:right;">
+<script type="text/javascript">new inter_slide(slides4)</script></td></tr></table>
+</div>
+
+<div class="split-content">
+	<p id="aboutmh" style="color: #33CCFF; letter-spacing: 2px;">ABOUT MOISHE HOUSE</p>
+
+	<p>Moishe House, a pluralistic international organization, provides meaningful Jewish experiences to young adults in their 20s. Our innovative model trains, supports and sponsors young Jewish leaders as they create vibrant home-based communities for themselves and their peers.</p>
+
+	<p>Our approach has enabled the existing 58 houses worldwide to engage more than 65,000 attendees a year. From Shabbat dinners and Learning Retreats to book clubs and sporting events, residents find ways to connect their peers with community, wherever they are. To learn more about our unique model, click here.</p>
+</div>
+
+<div class="ticker">	
+</div>
+
+<div id="social">
+	<p class="content-header">WHAT PEOPLE ARE SAYING</p>
+	<div id="publications">
+		<a href="http://www.economist.com/blogs/newsbook/2012/07/communal-living-jewish-youth" target= "_blank"><img src="assets/social/theeconomist.png" /></a>
+		<a href="http://www.nytimes.com/2010/02/11/garden/11moishe.html?_r=3&scp=1&sq=moishe%20house&st=cse%60&" target= "_blank"><img src="assets/social/thenewyorktimes.png" /></a>
+		<a href="http://www.washingtonpost.com/wp-dyn/content/article/2009/04/17/AR2009041702476.html" target= "_blank"><img src="assets/social/washpost.jpg" /></a>
+		<a href="http://www.pbs.org/wnet/religionandethics/?p=4089" target= "_blank"><img src="assets/social/PBS_logo.png" /></a>
+	</div>
+	<div id="mailing-list">
+		<p class="content-header"><a href="https://moishehouse.wufoo.com/forms/z7p8x1/">SUBSCRIBE TO OUR MAILING LIST</a></p>
+	</div>
+	<div id="social-media-links">
+		<a href="https://twitter.com/moishehouse"><img src="assets/social/twitter.png" /></a>
+		<a href="http://facebook.com/moishehouse.org"><img src="assets/social/facebook.png" /></a>
+		<a href="http://www.youtube.com/user/MoisheFoundation?feature=watch"><img src="assets/social/youtube.png" /></a>
+	</div>
+</div>

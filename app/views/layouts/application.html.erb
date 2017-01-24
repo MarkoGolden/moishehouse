@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>		
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  	<%= stylesheet_link_tag    "application", :media => "all" %>
+  	<%= stylesheet_link_tag params[:controller] %>
+  	<%= javascript_include_tag "application" %>
+  	<%= csrf_meta_tags %>
+</head>
+	<body>
+		<div class="container">
+			<%= render "mhwebsite/nav" %>
+			<%= render "mhwebsite/menu" %>
+			<div id="donate">
+				<%= link_to 'DONATE NOW', 'https://www.usaepay.com/interface/epayform/?UMkey=99BZX8z7u5a6SPjyHZGOdeg939h6GZ47&UMcommand=sale&UMamount=[UMamount]&UMinvoice=1969912048&UMcustreceipt=yes&UMhash=[hash]&UMdescription=Thank+you+for+donating+to+Moishe+House' %>
+			</div>
+			<%= yield %>	
+		</div>
+		<%= render "mhwebsite/footer" %>
+	</body>
+
+</html>
+
+<%# elsif request.subdomain == "mhwow" %>
+	<!-- <head>		
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	  	<%#= stylesheet_link_tag    "application", :media => "all" %>
+	  	<%#= stylesheet_link_tag params[:controller] %>
+	  	<%#= javascript_include_tag "application" %>
+	  	<%#= csrf_meta_tags %>
+	</head> -->
+	<!-- <body>
+		<div class="container">
+			<#%= render "mhwow/nav" %>
+			<#%= yield %>	
+		</div>
+	</body> -->

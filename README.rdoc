@@ -1,0 +1,28 @@
+==Moishe House Mintranet
+
+Ruby version: ruby 1.9.3p194
+
+Rails 3.2.11
+
+Download the source code, run the database migrations, then run the import tasks through the console using:
+
+    bundle exec rake import:all
+
+The import will take a few minutes to populate the entire database.
+
+Once the import is finished boot up the server with:
+
+    rails s
+    
+You can use a test admin login to get on:
+
+    login: roey@moishehouse.org
+    password: password
+
+Once you're logged in, you can access different views based on user "role" in two ways:
+
+1) create a new user with a different role (i.e. "resident" or "mhwow")
+
+2) alter the url (i.e. "http://localhost:3000/residents" for residents view, and "/host_center" for mhwow view)
+
+Use the Admin controls to view data/reports of user activity. Use the General controls to create your own programs/receipts etc. MHWOW is a branch of Moishe House that was given its own admin area to avoid confusion for our staff.

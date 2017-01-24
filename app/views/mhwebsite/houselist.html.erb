@@ -1,0 +1,34 @@
+<title>Moishe House - House List</title>
+
+<div id="houselist-content" id="us-houses">
+	<p class="content-header" style="text-align: center;">US HOUSES</p>
+
+	<% @houses_usa.each_slice((@houses_usa.size.to_f/5).ceil) do |slice| %>
+		<div class="house-col"  style="max-width:220px;padding-right:20px;float:left; display:block;">
+			<% slice.each do |h| %>
+				<p><%= link_to(h.city, mh_house_path(:id => h.slug)) %></p>
+			<% end %>
+		</div>
+	<% end %>
+
+</div>
+<div id="houselist-content" id="intl-houses" style="padding-top:50px;clear:both;">
+	<p class="content-header" style="text-align: center;">INTERNATIONAL HOUSES</p>
+
+	<% @houses_int.each_slice((@houses_int.size.to_f/4).ceil).with_index { |slice,i| %>
+		<% unless i == 3 %>
+			<div class="house-col" style="max-width:260px;padding-right:180px;float:left; display:block;">
+				<% slice.each do |h| %>
+					<p><%= link_to(h.city, mh_house_path(:id => h.slug)) %></p>
+				<% end %>
+			</div>
+		<% else %>
+			<div class="house-col" style="max-width:260px;float:left; display:block;">
+				<% slice.each do |h| %>
+					<p><%= link_to(h.city, mh_house_path(:id => h.slug)) %></p>
+				<% end %>
+			</div>
+		<% end %>
+	<% } %>
+
+</div>

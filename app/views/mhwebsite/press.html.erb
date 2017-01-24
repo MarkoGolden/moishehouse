@@ -1,0 +1,33 @@
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#date").change(function(){
+			$("#year-form").submit();
+		});
+	});
+</script>
+
+<title>Moishe House - Press</title>
+
+<div class="content">
+	<img src="assets/pressquotes.png" />
+</div><br>
+
+<h3 style="color: #33CCFF;">IN THE NEWS</h3><br>
+<form id="year-form" method="get" action="/press">
+	<% if params[:date] %>
+		<%= select_tag 'date', options_for_select(press_years, params[:date]) %>	
+	<% else %>
+		<%= select_tag 'date', options_for_select(press_years, Date.today.year) %>	
+	<% end %>
+</form>
+
+<div class="news">
+	<% @pressers.each do |p| %>
+	<div class="news-item" style="max-width: 800px;font-size:12pt;">		
+		<%= p.date.strftime("%m/%d/%Y") %> - <%= link_to "#{p.title}", "#{p.url}", :target => "_blank" %> - <em><%= p.publication %></em><br><br>
+		<%= p.firstpara %><br>
+		<%= link_to 'Read More', "#{p.url}", :target => "_blank" %>
+		<br><br>
+	<% end %>
+</div>
+</div>

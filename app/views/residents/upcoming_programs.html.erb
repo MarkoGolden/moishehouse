@@ -1,0 +1,35 @@
+<header class="jumbotron subhead" id="overview">
+  <div class="container">
+	<h1>Upcoming Programs</h1>
+    <p class="lead">View upcoming MHWOW programs</p>
+  </div>
+</header>
+
+<fieldset>
+	<legend>Programs</legend>
+	  <table class="table">
+    <thead>
+      <tr class="info">
+        <th>Date</th>
+        <th>Name</th>        
+        <th>Description</th>        
+        <th>RSVP</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @programs.each do |p| %>      
+      <%# look into date.nil issue %>      
+        <tr class="info">
+          <% if !p.date.nil? %>
+          <td><%= p.date.strftime("%D") %></td>
+          <% else %>
+          <td>N/A</td>
+          <% end %>
+          <td style="width: 150px;"><%= p.name %></td>          
+          <td><%= p.description %></td>   
+          <td style="border-right: #FFF 1px solid;"><a href="#" class="btn btn-success btn-small"><i class="icon-white icon-ok-sign"></i></a></td>       
+        </tr>        
+      <% end %>
+    </tbody>
+  </table>
+</fieldset>

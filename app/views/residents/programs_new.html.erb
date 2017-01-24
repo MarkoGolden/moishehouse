@@ -1,0 +1,120 @@
+	<script type="text/javascript">
+  $(document).ready(function(){
+    $('#opened_date').datepicker({ dateFormat: "dd-mm-yy"});
+  });  
+  
+  $(document).ready(function(){
+  	$(".controls#direct-service").on('click',"input[type=checkbox]", function() {
+	  	if(this.checked){
+	  		alert("WHAT IS DIRECT SERVICE? A program whose central activity is volunteering one's time and energy to provide concrete services meeting the needs of a vulnerable population. This is different than advocacy and education, which are also valuable components to Repair the World programs.")	
+	  	};
+  	});	
+  });
+
+  $(document).ready(function(){
+  	$(".controls#partnership").on('click',"input[type=checkbox]", function() {
+	  	if(this.checked){
+	  		$("#partner").show();
+	  	}else{
+	  		$("#partner").hide();
+	  	};
+	  });	
+  });
+
+  $(document).ready(function(){
+	  $("div select[name='program[program_type_id]']").change(function() {
+	  	if($("div select[name='program[program_type_id]']").val() == "3"){
+	  		$(".control-group#direct-service").show();
+	  	}else{
+	  		$(".control-group#direct-service").hide();
+	  	};
+	  });	
+  });
+  
+  
+</script>
+	<header class="jumbotron subhead" id="overview">
+	  <div class="container">
+		<h2>New Program</h2>    
+	  </div>
+	</header>
+	<legend style="margin-bottom: 20px;">Program Details</legend>	
+	<%= nested_form_for @program, :url => residents_programs_create_path, :html => { :multipart => true, :class => 'form-horizontal'} do |f| %>
+	<%#= f.error_messages %>
+	<%= f.hidden_field :gallery_id %>
+	
+	<section class="section-with-margin" id="basic">
+			<div class="row">
+				<div class="span5">								
+					<div class="control-group">
+				    <%= f.label :date, :class => 'control-label' %>
+				    <div class="controls">
+				      <%= f.text_field :date, :class => 'input-small', :id => 'opened_date', :required => true %>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <%= f.label :name, :class => 'control-label' %>
+				    <div class="controls">
+				        <%= f.text_field :name, :class => 'input-large', :required => true%>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <%= f.label :description, :class => 'control-label' %>
+				    <div class="controls">
+							<%= f.text_area :description, :rows => 3, :cols => 10, :required => true %>
+				    </div>
+				  </div>				  
+				  <div class="control-group">
+				    <%= f.label :program_type_id, :class => 'control-label' %>
+				    <div class="controls" id="program-types">
+				      <%= f.collection_select :program_type_id, ProgramType.all, :id, :name, :class => 'input-large', :prompt => "Select a program type...", :required => true %>
+				    </div>
+				  </div>
+				  <div class="control-group" id="direct-service" style="display:none;">
+				    <%= f.label :direct_service, :class => 'control-label' %>
+				    <div class="controls" id="direct-service">
+				      <%= f.check_box :direct_service %>
+				    </div>
+				  </div>				  
+				  <div class="control-group">
+				    <%= f.label :partnership, :class => 'control-label' %>
+				    <div class="controls" id="partnership">
+				      <%= f.check_box :partnership%>
+				    </div>
+				  </div>			  
+				  <div class="control-group" id="partner" style="display:none;">
+				    <%= f.label :partner, :class => 'control-label' %>
+				    <div class="controls">			    	
+				      <%= f.text_field :partner, :class => 'input-large' %>			      
+				    </div>
+				  </div>
+				  
+				  <div class="control-group">
+				    <%= f.label :attended_total, "Total Attendees", :class => 'control-label' %>
+				    <div class="controls">
+				      <%= f.text_field :attended_total, :class => 'input-large', :style => "width: 20px;", :placeholder => 0  %>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <%= f.label :attended_residents, "Residents", :class => 'control-label' %>
+				    <div class="controls">
+				      <%= f.text_field :attended_residents, :class => 'input-large', :style => "width: 20px;", :placeholder => 0  %>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <%= f.label :attended_new, "First-Timers", :class => 'control-label' %>
+				    <div class="controls">
+				      <%= f.text_field :attended_new, :class => 'input-large', :style => "width: 20px;", :placeholder => 0 %>
+				    </div>
+				  </div>
+				</div>
+		</section>
+	<fieldset>
+		<legend style="margin-bottom: -20px;">Save</legend>
+	  <div class="form-actions">
+	    <%= f.submit "Create Program", :class => 'btn btn-large btn-block btn-primary' %>
+	    <%= link_to "Cancel", residents_programs_path, :class => 'btn btn-large btn-block' %>
+	  </div>
+	</fieldset>
+	</div>
+	<% end %>

@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  house_id: 1
+  program_id: 1
+  submitter_id: 1
+  purchaser_id: 1
+  amount: 9.99
+  grant_id: 1
+  description: MyText
+  perishable: false
+  purpose_id: 1
+  status: MyString
+  approver_id: 1
+  approved_date: 2013-03-31 00:44:44
+  reject_reason: MyText
+  receipt_file_name: MyString
+
+two:
+  house_id: 1
+  program_id: 1
+  submitter_id: 1
+  purchaser_id: 1
+  amount: 9.99
+  grant_id: 1
+  description: MyText
+  perishable: false
+  purpose_id: 1
+  status: MyString
+  approver_id: 1
+  approved_date: 2013-03-31 00:44:44
+  reject_reason: MyText
+  receipt_file_name: MyString

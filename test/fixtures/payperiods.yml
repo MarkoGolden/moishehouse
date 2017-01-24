@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  date: 2013-04-04
+  locked: false
+  locked_rent: false
+
+two:
+  date: 2013-04-04
+  locked: false
+  locked_rent: false

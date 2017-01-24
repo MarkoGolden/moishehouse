@@ -1,0 +1,77 @@
+<script>
+  $('#myTabs a[data-toggle="tab"]').click(function (e) {
+    e.preventDefault();
+    $(this).tab('show');
+  })
+</script>
+
+<header class="jumbotron subhead" id="overview">
+  <div class="container">
+    <h1>MHWOW Receipts</h1>
+    <p class="lead">Reimburse, rinse, repeat</p>
+  </div>
+</header>
+<div class="tab-content">
+  <section class="tab-pane active" id="residents">
+	<div class="row">
+		<div class="span3">
+				<form method="get" action="/receipts/mhwow">
+					<div id="mhwow-location" style="float: left;">
+			      <h5>LOCATION</h5>
+			      <%= select_tag 'mhwowcity_id', options_from_collection_for_select(Mhwowcity.order("location"), :id, :location, :selected => params[:mhwowcity_id]), :prompt => "All Locations", :style => "width: auto;" %>
+			    </div>
+    		<div id="payperiod-range" style="float: left;">
+					<h5>PAYPERIOD</h5>			
+						<%= select_tag 'payperiod_id', options_from_collection_for_select(Payperiod.where("locked_rent = true").order("date desc"), :id, :date, :selected => params[:payperiod_id]), :prompt => "All PayPeriods"%>
+				</div>
+					
+					<div id="start-date" style="float: left;">
+			      <h5>START DATE</h5>
+			      <%= select_tag 'start_date', options_for_select(month_array, :selected => @start_date.strftime("%m-%d-%Y")), :style => "width: 105px;"%>
+			    </div>
+			    <div id="end-date" style="float: left; padding-left: 10px">
+			      <h5>END DATE</h5>
+			      <%= select_tag 'end_date', options_for_select(month_array, :selected => @end_date.strftime("%m-%d-%Y")), :style => "width: 105px;"%></br>
+			    </div><br><br><br><br><br>
+					<input class="btn btn-primary btn-large" type="submit" value="filter" />				
+				</form>
+		</div>
+	<div class="span9">
+		
+		<table class="table table-striped">
+		  <thead>
+		    <tr>
+		      <th>Submitted</th>
+		      <th>Program Date</th>
+		      <th>Submitter</th>
+		      <th>Program</th>
+		      <th>Amount</th>
+		      <th>Description</th>
+		      <th>Status</th>			  
+		    </tr>
+		  </thead>
+		  <tbody>
+		  	
+			<% @receipts.each do |receipt| %>	
+
+			  <% if receipt.program != nil && receipt.submitter != nil && receipt.program.date != nil %>
+			  <tr class="<%=receipt.row_color%>">
+		        <td width="70px;"><%= receipt.submit_date.to_datetime.strftime("%m/%-d/%Y") %></td>
+		        <td width="115px;"><%= receipt.program.date.to_datetime.strftime("%m/%-d/%Y") %></td>
+		        <td width="100px;"><%= receipt.submitter.firstlast %></td>
+		        <td width="200px;"><%= receipt.program.name %>
+						<td><h3><%= number_to_currency(receipt.amount) %></h3></td>
+		        <td width="400px;"><%= receipt.description %></td>		        
+		        <td>
+		          <%= link_to receipt.status_name_html.html_safe,
+		                      "/receipts/edit/#{receipt.id}" %><br />
+		        </td>
+		      </tr>
+			  <% end %>
+		    <% end %>		    
+		  </tbody>
+		</table>
+	</div>
+	</div>
+  </section>
+</div>

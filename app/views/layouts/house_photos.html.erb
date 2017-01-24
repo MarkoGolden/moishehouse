@@ -1,0 +1,17 @@
+<%= render 'house_nav' %>
+<div id="house-photos" style="clear:both;max-width:855px;margin:0 auto;padding-top:30px;">
+	<% @programs.each do |prog| %>
+		<% prog.assets.each do |p| %>
+			<% unless p.photo.url == "/images/original/missing.png" %>
+				<%= link_to "#lightbox_#{p.id}", :"data-toggle"=>"lightbox" do %>
+					<%= image_tag p.photo.url, :style=>"width:100px; height:100px;" %>		
+				<% end %>
+				<div id="lightbox_<%=p.id%>" class="lightbox hide fade"  tabindex="-1" role="dialog" aria-hidden="true">
+					<div class='lightbox-content'>
+						<%= image_tag p.photo.url %>	
+					</div>
+				</div>
+			<% end %>
+		<% end %>
+	<% end %>
+</div>

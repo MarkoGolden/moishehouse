@@ -1,0 +1,81 @@
+<%- model_class = House -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:opened_date) %>:</strong></dt>
+  <dd><%= @house.opened_date %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:city) %>:</strong></dt>
+  <dd><%= @house.city %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:state) %>:</strong></dt>
+  <dd><%= @house.state %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:country) %>:</strong></dt>
+  <dd><%= @house.country %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:region) %>:</strong></dt>
+  <dd><%= @house.region %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:web_description) %>:</strong></dt>
+  <dd><%= @house.web_description %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:brn) %>:</strong></dt>
+  <dd><%= @house.brn %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:rsj) %>:</strong></dt>
+  <dd><%= @house.rsj %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:mail_address) %>:</strong></dt>
+  <dd><%= @house.mail_address %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:mail_city) %>:</strong></dt>
+  <dd><%= @house.mail_city %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:mail_state) %>:</strong></dt>
+  <dd><%= @house.mail_state %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:mail_zip) %>:</strong></dt>
+  <dd><%= @house.mail_zip %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:mail_instructions) %>:</strong></dt>
+  <dd><%= @house.mail_instructions %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:mail_international) %>:</strong></dt>
+  <dd><%= @house.mail_international %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:contact_phone) %>:</strong></dt>
+  <dd><%= @house.contact_phone %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:contact_email) %>:</strong></dt>
+  <dd><%= @house.contact_email %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:website) %>:</strong></dt>
+  <dd><%= @house.website %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:calendar) %>:</strong></dt>
+  <dd><%= @house.calendar %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:rent_name) %>:</strong></dt>
+  <dd><%= @house.rent_name %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:rent_address) %>:</strong></dt>
+  <dd><%= @house.rent_address %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:rent_city) %>:</strong></dt>
+  <dd><%= @house.rent_city %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:rent_state) %>:</strong></dt>
+  <dd><%= @house.rent_state %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:rent_zip) %>:</strong></dt>
+  <dd><%= @house.rent_zip %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:rent_instructions) %>:</strong></dt>
+  <dd><%= @house.rent_instructions %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:rent_name_on_check) %>:</strong></dt>
+  <dd><%= @house.rent_name_on_check %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:programs_per_month) %>:</strong></dt>
+  <dd><%= @house.programs_per_month %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:rent_total) %>:</strong></dt>
+  <dd><%= @house.rent_total %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:rent_subsidy) %>:</strong></dt>
+  <dd><%= @house.rent_subsidy %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:budget_program) %>:</strong></dt>
+  <dd><%= @house.budget_program %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:budget_cleaning) %>:</strong></dt>
+  <dd><%= @house.budget_cleaning %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:active) %>:</strong></dt>
+  <dd><%= @house.active %></dd>
+</dl>
+
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              houses_path, :class => 'btn'  %>
+  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_house_path(@house), :class => 'btn' %>
+  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              house_path(@house),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>
+</div>

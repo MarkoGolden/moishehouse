@@ -1,0 +1,71 @@
+  <%#= form_tag residents_contacts_path, :method => 'get' do %>
+  <!-- <p> -->
+    <%#= text_field_tag :search, params[:search] %>
+    <%#= submit_tag "Search", :name => nil %>
+  <!-- </p> -->
+  <%# end %>
+<script>
+$('#myTabs a[data-toggle="tab"]').click(function (e) {
+  e.preventDefault();
+  $(this).tab('show');
+})
+</script>
+  
+  <header class="jumbotron subhead" id="overview">
+    <div class="container">
+      <h1>Contact List</h1>
+      <p class="lead">The people who make it happen.</p>
+    </div>
+  </header>
+
+  <div id="myTabs" class="container">
+    <ul class="nav nav-tabs" style="clear:both;">
+        <li class="active"><a href="#residents" data-toggle="tab">Active Residents</a></li>
+        <!-- <li><a href="#alumni" data-toggle="tab">Alumni</a></li>
+        <li><a href="#mhwow" data-toggle="tab">MH:WOW</a></li>
+        <li><a href="#staff" data-toggle="tab">Staff</a></li>
+        <li><a href="#all" data-toggle="tab">All</a></li>   -->   
+    </ul>
+  </div>
+
+  <div class="tab-content">
+  <section class="tab-pane active" id="residents">
+  
+  
+  <table class="table table-condensed" style="table-layout: fixed;">
+    <thead>
+      <tr>
+        <th width="auto;" style="text-align:center;">Name</th>                
+        <th width="auto;" style="text-align:center;">Email</th>
+        <th width="auto;" style="text-align:center;">Phone</th>
+      </tr>
+    </thead>
+    <tbody>      
+      <% change = "blah" %>        
+        <% @houses.each do |house| %>      
+        <% if change != house.city.upcase %>
+          <% change = house.city.upcase %>
+        <tr class="info" id="house<%=change%>">
+          <td align="center" colspan="3" style="text-align: center; font-size: 14pt;"><strong><%="#{house.city}, #{house.state}" %></strong></td>
+        </tr>
+        <% end %>
+        <tr>
+          <% residents = house.residents.where("active = true").sort_by! { |res| res.first_name } %>
+          <% residents.each do |resident| %>            
+            <td style="text-align:center;"><%= "#{resident.first_name} #{resident.last_name}" %></td>
+            <td style="text-align:center;"><a href="mailto:<%= "#{resident.email}" %>"><%= "#{resident.email}"%></td>
+            <% if resident.phone && !resident.phone.include?("@") %>
+              <td style="text-align:center;"><%= "#{resident.phone}" %></td>
+            <% else %>
+              <td style="text-align:center;">N/A</td>
+            <% end %>
+        </tr>
+          <% end %>
+        <% end %>	  
+    </tbody>
+  </table>
+</section>
+
+
+  
+ </div>

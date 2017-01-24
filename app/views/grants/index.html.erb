@@ -1,0 +1,38 @@
+	<p class="pull-right">
+		<br />
+		<%= link_to "Create New Grant", grants_new_path, :class => 'btn btn-primary btn-large' %>
+    <%= link_to "View Grant Programs", grants_programs_path, :class => 'btn btn-primary btn-large' %>
+	</p>
+<header class="jumbotron subhead" id="overview">
+  <div class="container">
+    <h1>Grants</h1>
+    <p class="lead">Thanks to the generosity of our sponsors</p>
+  </div>
+</header>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Amount</th>
+      <th>Description</th>
+      <th>Created</th>
+      <th>Expires</th>
+      <th>Tools</th>
+      <th>Delete</th>
+
+    </tr>
+  </thead>
+  <tbody>
+	    <% @grants.each do |grant| %>
+	      <tr class="<%=grant.rowcolor%>">
+	        <td><%= grant.name %></td>
+	        <td><%= number_to_currency(grant.amount) %></td>
+	        <td><%= grant.description%></td>
+	        <td><%= grant.created_at.strftime("%D") %></td>
+	        <td><%= grant.expires.strftime("%D") %></td>
+	        <td><%= link_to "Edit", "/grants/edit/" + grant.id.to_s, :class => 'btn btn-large' %></td>
+          <td><%= link_to "Delete", "/grants/destroy/" + grant.id.to_s, :method => :delete, class: "btn btn-danger btn-large" %></td>
+	      </tr>
+	    <% end %>
+  </tbody>
+</table>

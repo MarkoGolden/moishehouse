@@ -1,0 +1,52 @@
+<script>
+	$(document).ready(function(){
+		$("#photo_upload_select").change(function(){
+			console.log("Hi");
+			html = $(".asset_item").first();
+			$('.thumbnails').html("");
+			html.clone().appendTo(".thumbnails");
+		});
+	});
+</script>
+
+<% @program.assets.each do |p| %>
+	<% unless p.photo.url == "/images/original/missing.png" %>
+		<%= link_to "#lightbox_#{p.id}", :"data-toggle"=>"lightbox" do %>
+			<%= image_tag p.photo.url, :style=>"width:100px; height:100px;" %>		
+		<% end %>
+		<div id="lightbox_<%=p.id%>" class="lightbox hide fade"  tabindex="-1" role="dialog" aria-hidden="true">
+			<div class='lightbox-content'>
+				<%= image_tag p.photo.url %>	
+			</div>
+		</div>
+	<% end %>  					
+<% end %>
+
+<!-- <select >
+	<option value="1">1</option>
+</select> -->
+
+
+<%= nested_form_for @program, :url => "/upload_photos", :html => {:multipart => true, :class => 'form-horizontal'} do |f| %>
+	<section>
+		<%=f.hidden_field :id, :value => @program.id%>
+		<div class="span3 offset1">
+			<div id="new-photo" style="margin-top: -10px;">
+				<h3>Upload Photos</h3>					  
+				<ul class="thumbnails">
+					<li class="span2 offset3 asset_item">				  
+						<%= f.fields_for :assets, @program.assets.build do |n| %>	
+							<%= n.label :photo, "Image File" %>
+							<%= n.file_field :photo %>
+						<% end %>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<div class="form-actions">
+	    <%= f.submit "Upload", :class => 'btn btn-large btn-block btn-primary' %>
+	    <%= link_to "Cancel", residents_programs_path, :class => 'btn btn-large btn-block' %>
+	</div>
+<% end %>

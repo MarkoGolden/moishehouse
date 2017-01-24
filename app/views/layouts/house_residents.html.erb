@@ -1,0 +1,13 @@
+<%= render 'house_nav' %>
+<div id="residents-list" style="clear:both;max-width: 865px;margin:0 auto;padding-top:50px;">
+	<% @house.residents.each do |res| %>
+	<div id="resident-photo" style="float:left;">
+		<img src="/missing.png" /> <!-- once we figure out user photos they will go here -->
+	</div>
+	
+	<div id="resident-info" style="float:right;">
+		<%= res.firstlast %><br>
+		<%= res.bio %><br>
+	</div>
+	<% end %>
+</div>

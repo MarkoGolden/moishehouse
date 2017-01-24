@@ -1,0 +1,94 @@
+	<p class="pull-right">
+		<br />
+		<%= link_to "Upload New Receipt", "/residents/receipts_new", :class => 'btn btn-large btn-primary' %>
+	</p>
+<header class="jumbotron subhead" id="overview">
+  <div class="container">
+    <h1>Receipts</h1>
+  </div>
+</header>
+		<ul class="nav nav-pills">
+		  <li<%=raw " class=\"active\"" if @daysago == 30 %>><a href="?daysago=30">Last 30 Days</a></li>
+		  <li<%=raw " class=\"active\"" if @daysago == 60 %>><a href="?daysago=60">Last 60 Days</a></li>
+		  <li<%=raw " class=\"active\"" if @daysago == 180 %>><a href="?daysago=180">Last 180 Days</a></li>
+		  <li<%=raw " class=\"active\"" if @daysago == 365 %>><a href="?daysago=365">Last Year</a></li>
+		</ul>
+		<table class="table table-striped" style="margin-bottom:0px;">
+					<tr class="warning">
+						<td colspan="7" style="text-align:center; text-weight:bold; font-size:14px;">
+							<h2><%= current_user.house.location %></h2>
+							<% 
+							total = 0
+							current_user.house.receipts.where("submit_date > ?", @daysago.days.ago).each do |receipt| 
+								total += receipt.amount if receipt.status == "2"
+							end	%>
+							 <!-- &nbsp;&nbsp;&nbsp;(Total Approved: <%#=number_to_currency(total) %>) -->
+						</td>
+					</tr>
+			</table>
+		<table class="table table-striped">
+		  <thead>
+		    <tr style="background-color: #FCF8E3;">
+		      <th>Submitted</th>
+		      <th>Amount</th>
+		      <th>Program</th>
+		      <th>Budget</th>
+		      <th>Status</th>			  
+		      <th>Controls</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+				
+				<%# if current_user.house.id = 84 %>
+					<!-- <tr class="warning">
+						<td colspan="7" style="text-align:center; text-weight:bold; font-size:14px;"> -->
+							<!-- <h2><%#= current_user.house.location %></h2> -->
+							<%# 
+							total = 0
+							current_user.house.receipts.where("submitter_id = ? AND submit_date > ?", current_user.id, @daysago.days.ago).each do |receipt| 
+								total += receipt.amount if receipt.status == "2"
+							end	%>
+							 <!-- &nbsp;&nbsp;&nbsp;(Total Approved: <%#=number_to_currency(total) %>) -->
+						<!-- </td> -->
+					<!-- </tr> -->
+
+					<%# current_user.house.receipts.where("submitter_id = ? AND submit_date > ?", current_user.id, @daysago.days.ago).order("submit_date DESC").each do |receipt| %>
+					  <%# if receipt.program != nil && receipt.submitter != nil %>
+					  <!-- <tr class="<%#=receipt.row_color%>"> -->
+				        <!-- <td width="100px;"><%#= receipt.submit_date.to_datetime.strftime("%m/%-d/%Y") %></td> -->
+								<!-- <td><h3><%#= number_to_currency(receipt.amount) %></h3></td> -->
+				        <!-- <td width="400px;"><%#= receipt.program.name %><br /><%#= receipt.description %><br />Submitted by: <%#= receipt.submitter.firstlast%></td> -->
+				      	<!-- <td><%#= receipt.purpose.name if receipt.purpose%></td>		         -->
+				        <!-- <td>
+				          <%#= link_to receipt.status_name_html.html_safe,
+				                      "/residents/receipts_edit/#{receipt.id}" %><br />
+				        </td> -->
+				      <!--   <td><%#= link_to 'Edit', "/residents/receipts_edit/#{receipt.id}", :class => 'btn btn-medium' %><br />
+				        </td>
+				      </tr> -->
+					  <%# end %>
+				  <%# end %>
+
+			  <%# else %>
+			  
+				  <% current_user.house.receipts.where("submit_date > ?", @daysago.days.ago).order("submit_date DESC").each do |receipt| %>
+					  <% if receipt.program != nil && receipt.submitter != nil %>
+					  	<tr class="<%=receipt.row_color%>">
+				        <td width="100px;"><%= receipt.submit_date.to_datetime.strftime("%m/%-d/%Y") %></td>
+								<td><h3><%= number_to_currency(receipt.amount) %></h3></td>
+				        <td width="400px;"><%= receipt.program.name %><br /><%= receipt.description %><br />Submitted by: <%= receipt.submitter.firstlast%></td>
+				      	<td><%= receipt.purpose.name if receipt.purpose%></td>		        
+				        <td>
+				          <%= receipt.status_name_html.html_safe %><br />
+				        </td>
+				        <td><%= link_to 'Edit', "/residents/receipts_edit/#{receipt.id}", :class => 'btn btn-medium' %>				        	
+              		<%= link_to "Delete",
+                          "/residents/receipts_destroy/#{receipt.id}", :class => 'btn btn-medium btn-danger' %>
+              	
+				        </td>
+				      </tr>
+					  <% end %>
+				  <% end %>				
+		  </tbody>
+		</table>
+	</div>

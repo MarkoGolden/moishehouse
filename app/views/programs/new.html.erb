@@ -1,0 +1,17 @@
+<div id="prog-photos" style="margin-top: 300px;">
+<%= form_for @program, :html => {:multipart => true} do |f| %>
+
+<%#= render partial: 'error', collection: @program.errors.full_messages %>
+
+<%= f.fields_for :program_photos do |builder| %>	
+
+	<%= builder.label :photo, "Image File" %>
+	<%= builder.file_field :photo %>
+
+<% end %>
+
+<%= f.submit "Submit" %>
+
+<% end %>
+
+</div>

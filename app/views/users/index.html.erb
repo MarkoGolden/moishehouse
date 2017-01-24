@@ -1,0 +1,248 @@
+<script>
+  $('#myTabs a[data-toggle="tab"]').click(function (e) {
+    e.preventDefault();
+    $(this).tab('show');
+  })
+</script>
+
+  <p class="pull-right">
+		<br />
+		<%= link_to "Create New User", "/users/new", :class => 'btn btn-large btn-primary' %>
+	</p>
+<header class="jumbotron subhead" id="overview">
+  <div class="container">
+    <h1>Users</h1>
+    <p class="lead">The people who make it happen.</p>
+  </div>
+</header>
+<%#= form_tag users_path, :method => 'get', :style => "float: left;", :id => "user_search" do %>
+  <!-- <p> -->
+    <%#= text_field_tag :search, params[:search] %>
+    <%#= submit_tag "Search", :name => nil, :class => 'btn btn-primary', :id => 'search-btn' %>
+  <!-- </p> -->
+<%# end %>
+<div id="myTabs" class="container">
+	<ul class="nav nav-tabs" style="clear:both;">
+	    <li class="active"><a href="#residents" data-toggle="tab">Active Residents</a></li>
+	    <li><a href="#alumni" data-toggle="tab">Alumni</a></li>
+	    <li><a href="#mhwow" data-toggle="tab">MH:WOW</a></li>
+	    <li><a href="#staff" data-toggle="tab">Staff</a></li>
+	    <li><a href="#all" data-toggle="tab">All</a></li>     
+	</ul>
+</div>
+
+<div class="tab-content">
+  <section class="tab-pane active" id="residents">
+    
+  <p class="lead text-center">
+	  <% for i in ("A".."Z") %>
+	  <a href="#resident<%=i%>"><%=i%></a> <%= "|" unless i == "Z"%>
+	  <% end %>    
+  </p>
+  
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th width="150px;">Name</th>
+        <th width="200px;">House</th>
+        <th width="200px;">Phone</th>
+        <th width="250px;">Email</th>
+        <th><div class="pull-right">Details</div></th>
+      </tr>
+    </thead>
+    <tbody>
+	  <% change = "blah"%>
+      <% @residents.where("last_name IS NOT NULL").each do |u| %>
+      <% if change != u.last_name.upcase %>
+      	<% change = u.last_name.upcase %>
+	    <tr id="resident<%=change%>">
+	  <% end %>
+        <tr>
+          <td><%=raw u.fullname %></td>
+          <td><%= u.house.location %></td>
+          <td><%= u.phone %></td>
+          <td><a href="mailto:<%= u.email %>"><%= u.email %></a></td>
+          <td>
+			<div class="pull-right">
+            <%= link_to "Details", "/users/edit/#{u.id}", :class => 'btn btn-success' %>
+			</div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  </section>
+  <section class="tab-pane" id="alumni">
+  <p class="lead text-center">
+	  <% for i in ("A".."Z") %>
+	  <a href="#alumni<%=i%>"><%=i%></a> <%= "|" unless i == "Z"%>
+	  <% end %>
+  </p>
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th width="150px;">Name</th>
+        <th width="200px;">Location</th>
+        <th width="200px;">Phone</th>
+        <th width="250px;">Email</th>
+        <th><div class="pull-right">Details</div></th>
+      </tr>
+    </thead>
+    <tbody>
+	  <% change = "blah"%>
+      <% @alumni.each do |u| %>
+	      <% if change != u.last_name.upcase %>
+	      	<% change = u.last_name.upcase %>
+		    <tr id="alumni<%=change%>">
+		  <% end %>
+        <tr>
+          <td><%=raw u.fullname %></td>
+          <td><%= u.house.location %></td>
+          <td><%= u.phone %></td>
+          <td><a href="mailto:<%= u.email %>"><%= u.email %></a></td>
+          <td>
+			<div class="pull-right">
+            <%= link_to "Details", "/users/edit/#{u.id}", :class => 'btn btn-success' %>
+			</div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  </section>
+  
+  <section class="tab-pane" id="mhwow">
+    <div class="mhwow-numbers">      
+        <strong>Total Hosts: <%= @total_hosts %></strong> | <strong>Alumni Hosts: <%= @total_alumni %></strong> | <strong>San Diego Hosts: <%= @san_diego_hosts %></strong>
+    </div><br>
+  <p class="lead text-center">
+	  <% for i in ("A".."Z") %>
+	  <a href="#mhwow<%=i%>"><%=i%></a> <%= "|" unless i == "Z"%>
+	  <% end %>
+  </p>
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th width="150px;">Name</th>
+        <th width="200px;">City</th>
+        <th width="200px;">Phone</th>
+        <th width="250px;">Email</th>
+        <th width="100px;">Alumni</th>
+        <th width="100px;">Programs</th>        
+        <th width="200px;">Details</th>
+      </tr>
+    </thead>    
+    <tbody>      
+	  <% change = "blah"%>
+      <% @mhwow.each do |u| %>
+      <% if change != u.last_name.upcase %>
+      	<% change = u.last_name.upcase %>
+	    <tr id="mhwow<%=change%>">
+	  <% end %>
+        <tr>
+          <td><%= "#{u.first_name} #{u.last_name}" %></td>
+          <td><%= "#{u.mail_city}, #{u.mail_state}" %></td>
+          <td><%= number_to_phone(u.phone.gsub("-", "").gsub(" ", "").gsub("(", "").gsub(")", ""), :area_code => true) %></td>
+          <td><a href="mailto:<%= u.email %>"><%= u.email %></a></td>
+          <td>
+            <% if u.alumni == true %>
+              <p>Yes</p>
+            <% else %>
+              <p>No</p>
+            <% end %>
+
+          </td> 
+          <td style="text-align:center;"><%= u.programs.count %></td>
+          <td>			       
+              <%= link_to "Details", "/users/edit/#{u.id}", :class => 'btn btn-success' %>       
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  </section>
+  <section class="tab-pane" id="staff">
+  <p class="lead text-center">
+	  <% for i in ("A".."Z") %>
+	  <a href="#staff<%=i%>"><%=i%></a> <%= "|" unless i == "Z"%>
+	  <% end %>
+  </p>
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th width="150px;">Name</th>
+        <th width="200px;">City</th>
+        <th width="200px;">Phone</th>
+        <th width="250px;">Email</th>
+        <th><div class="pull-right">Details</div></th>
+      </tr>
+    </thead>
+    <tbody>
+	  <% change = "blah"%>
+      <% @staff.each do |u| %>
+      <% if change != u.last_name.upcase %>
+      	<% change = u.last_name.upcase %>
+	    <tr id="staff<%=change%>">
+	  <% end %>
+        <tr>
+          <td><%=raw u.fullname %></td>
+          <% if u.mail_city? %>
+          <td><%= "#{u.mail_city}, #{u.mail_state}" %></td>
+          <% else %>
+          <td>N/A</td>
+          <% end %>
+          <td><%= u.phone %></td>
+          <td><a href="mailto:<%= u.email %>"><%= u.email %></a></td>
+          <td>
+			<div class="pull-right">
+            <%= link_to "Details", "/users/edit/#{u.id}", :class => 'btn btn-success' %>
+			</div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  </section>
+  <section class="tab-pane" id="all">
+  <p class="lead text-center">
+	  <% for i in ("A".."Z") %>
+	  <a href="#all<%=i%>"><%=i%></a> <%= "|" unless i == "Z"%>
+	  <% end %>
+  </p>
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th width="150px;">Name</th>
+        <th width="200px;">City</th>
+        <th width="200px;">Phone</th>
+        <th width="250px;">Email</th>
+        <th><div class="pull-right">Details</div></th>
+      </tr>
+    </thead>
+    <tbody>
+	  <% change = "blah"%>
+      <% @all.each do |u| %>
+      <% if change != u.last_name.upcase %>
+      	<% change = u.last_name.upcase %>
+	    <tr id="all<%=change%>">
+	  <% end %>
+        <tr>
+          <td><%=raw u.fullname %></td>
+          <% if u.active? && u.house.id != 84 && u.house.id != 11 %>
+          <td><%= u.house.location %></td>
+          <% else %>
+          <td><%= "#{u.mail_city}, #{u.mail_state}" %></td>
+          <% end %>
+          <td><%= u.phone %></td>
+          <td><a href="mailto:<%= u.email %>"><%= u.email %></a></td>
+          <td>
+			<div class="pull-right">
+            <%= link_to "Details", "/users/edit/#{u.id}", :class => 'btn btn-success' %>
+			</div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  </section>
+</div>

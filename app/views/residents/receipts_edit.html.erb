@@ -1,0 +1,165 @@
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#opened_date').datepicker({ dateFormat: "yy-mm-dd"});
+  });
+
+  $(document).ready(function(){
+	  $("div select[name='receipt[purpose_id]']").change(function() {
+	  	if($("div select[name='receipt[purpose_id]']").val() == "9" || $("div select[name='receipt[purpose_id]']").val() == "10" || $("div select[name='receipt[purpose_id]']").val() == "39") {
+	  		$(".control-group#grant-id").show();
+	  	}else{
+	  		$(".control-group#grant-id").hide();
+	  	};
+	  });	
+  });
+
+  $(document).ready(function(){
+	  $("div select[name='receipt[purpose_id]']").change(function() {
+	  	if($("div select[name='receipt[purpose_id]']").val() == "9" || $("div select[name='receipt[purpose_id]']").val() == "10" || $("div select[name='receipt[purpose_id]']").val() == "39") {
+	  		$(".control-group#grant-id").show();
+	  	}else{
+	  		$(".control-group#grant-id").hide();
+	  	};
+	  });	
+  });
+</script>
+<div class="row" id="receipt-edit" style="margin-top:0px;">
+<div class="span3">
+</div>
+<div class="span9">
+	<div class="receipt-form" style="margin-left: -270px;">
+		<%= form_for :receipt, :url => residents_receipts_update_path, :html => { :class => 'form-horizontal', :multipart => true } do |f| %>
+			<%= f.hidden_field :id, :value => @receipt.id %>
+			<%= link_to '< Back to Receipts', residents_receipts_path, class: 'btn btn-primary', style: 'margin-bottom: 30px;' %>
+		<section class="section-with-margin" id="basic">
+		  <fieldset>  	
+		 	<% if @receipt.status != "2" %>
+				<legend>Edit Receipt</legend>
+			<% else %>
+				<legend>Receipt Info</legend>
+			<% end %>	
+			<div class="row">
+				<div class="span4">
+					  <div class="control-group">
+					    <%= f.label :program_id, :class => 'control-label' %>
+					    <div class="controls">
+							<% if @receipt.status != "2" %>
+					        <%= f.collection_select :program_id, Program.where("house_id = ?", @receipt.house_id).order("date DESC"), :id, :date_and_name, :class => "input-medium"%>
+							<% else %>
+							<span class="input-large uneditable-input"><%=@receipt.program.name%></span>					
+							<% end %>
+					    </div>
+					  </div>
+					  <div class="control-group">
+					    <%= f.label :description, :class => 'control-label' %>
+					    <div class="controls">
+							<% if @receipt.status != "2" %>
+							<%= f.text_area :description, :rows => 3, :cols => 10%>
+							<% else %>
+							<span class="input-large uneditable-input"><%=@receipt.description%></span>
+							<% end %>
+					    </div>
+					  </div>			  
+					  <div class="control-group">
+					    <%= f.label :submitter_id, :class => 'control-label' %>
+					    <div class="controls">
+							<%= f.hidden_field :submitter_id, :value => @receipt.submitter_id%>
+							<span class="input-large uneditable-input"><%= @receipt.submitter.firstlast %></span>
+					    </div>
+					  </div>
+					  <div class="control-group">
+					    <%= f.label :purchaser_id, "Purchaser", :class => 'control-label' %>
+					    <div class="controls">
+							<% if @receipt.status != "2" %>
+					        <%= f.collection_select :purchaser_id, User.where("house_id = ? and active = true", @receipt.house_id).order("first_name, last_name"), :id, :firstlast, :selected => "#{@receipt.purchaser.id}" %>
+							<% else %>
+							<span class="input-large uneditable-input"><%=@receipt.purchaser.firstlast%></span>					
+							<% end %>
+					    </div>
+					  </div>
+					  <div class="control-group">
+					    <%= f.label :amount, :class => 'control-label' %>
+					    <div class="controls">
+						  <div class="input-prepend">
+					        <span class="add-on">$</span>
+							<% if @receipt.status != "2" %>
+					      	<%= f.text_field :amount, :class => 'input-small' %>
+							<% else %>
+							<span class="input-large uneditable-input"><%=@receipt.amount%></span>					
+							<% end %>
+						  </div>
+					    </div>
+					  </div>			  
+					  <div class="control-group">
+					    <%= f.label :purpose_id, "Budget", :class => 'control-label' %>
+					    <div class="controls">
+							<% if @receipt.status != "2" %>
+					        <%= f.collection_select :purpose_id, Purpose.where("id IN(1,9,10,39,2,5,6,3,8,4,44)"), :id, :name, :required => true, :selected => @receipt.purpose.name %>
+							<% else %>
+							<span class="input-large uneditable-input"><%=@receipt.purpose.name if @receipt.purpose%></span>					
+							<% end %>
+					    </div>
+					  </div>
+					  <div class="control-group" id="grant-id" style="display:none;">
+					    <%= f.label :grant_id, :class => 'control-label' %>
+					    <div class="controls">
+					    	<% if @receipt.status != "2" %>
+					        <%= f.collection_select :grant_id, Grant.where("expires > ?", Date.today).order("name"), :id, :name, :prompt => "Select a grant..." %>
+					       <% else %>
+					       <span class="input-large uneditable-input"><%=@receipt.grant.name if @receipt.grant%></span>					
+							<% end %>
+					    </div>
+					  </div>			  
+					  <div class="control-group">
+					    <span class="control-label">Current Status</span>
+					    <div class="controls">
+							<%=raw @receipt.status_name_html%>
+							<% if @receipt.status == "2" %>
+							by <%=@receipt.approver.firstlast%><br /><%=@receipt.approved_date.strftime("%B %-d at %H:%M:%S %p")%>
+							<% end %>
+							<% if @receipt.status == "3" %>
+							<br />because: <%=@receipt.reject_reason%>
+							<% end %>
+					    </div>
+					  </div>
+				</div>
+				<div class="span3 offset1">
+					<div class="receipt-image">
+					    <ul class="thumbnails">
+						  <li class="span2 offset3">				  	
+						   	<h3>Upload Image</h3>
+							  <p class="text-center">
+								<% if @receipt.status != "2" %>
+								<h5>Change image</h5>	<%= f.file_field :receipt %>						
+								<% end %>
+								<%= image_tag @receipt.receipt_legacy %>
+
+							  </p>
+						  </li>
+						</ul>
+					</div>
+				</div>
+			</div>	
+		  </fieldset>
+		</section>
+		<% if @receipt.status != "2" %>
+		<fieldset>
+			<legend>Save</legend>
+		  <div class="form-actions">
+		    <%= f.submit "Save", :class => 'btn btn-large btn-block btn-primary' %>
+		    <%= link_to "Cancel", residents_receipts_path, :class => 'btn btn-large btn-block' %>
+		  </div>
+		</fieldset>
+		<% end %>
+		<fieldset>
+		<% if @receipt.status != "2" %>
+		<legend>Delete Receipt</legend>  
+		  <div class="form-actions">
+		      <%= link_to "Delete Receipt", "/residents/receipts_destroy/" + @receipt.id.to_s, :method => :delete, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, :class => 'btn btn-large btn-danger btn-block' %>  
+		  </div>
+		 <% end %>
+		 </fieldset>
+		</div>
+	</div>
+</div>
+<% end %>

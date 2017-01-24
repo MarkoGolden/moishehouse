@@ -1,0 +1,174 @@
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#opened_date').datepicker({ dateFormat: "yy-dd-mm"});
+  });  
+  
+  $(document).ready(function(){
+  	$(".controls#direct-service").on('click',"input[type=checkbox]", function() {
+	  	if(this.checked){
+	  		alert("WHAT IS DIRECT SERVICE? A program whose central activity is volunteering one's time and energy to provide concrete services meeting the needs of a vulnerable population. This is different than advocacy and education, which are also valuable components to Repair the World programs.")	
+	  	};
+  	});	
+  });
+
+  $(document).ready(function(){
+  	$(".controls#partnership").on('click',"input[type=checkbox]", function() {
+	  	if(this.checked){
+	  		$("#partner").show();
+	  	}else{
+	  		$("#partner").hide();
+	  	};
+	  });	
+  });
+
+  $(document).ready(function(){
+	  $("div select[name='program[program_type_id]']").change(function() {
+	  	if($("div select[name='program[program_type_id]']").val() == "3"){
+	  		$(".control-group#direct-service").show();
+	  	}else{
+	  		$(".control-group#direct-service").hide();
+	  	};
+	  });	
+  });
+
+  $(document).ready(function(){
+  	$(".control-group#direct-service").on('click',"input[type=checkbox]", function() {
+	  	if(this.checked){
+	  		$(".control-group#direct-service").show();
+	  	}else{
+	  		$(".control-group#direct-service").hide();
+	  	};
+	  });	
+  });
+</script>
+
+<header class="jumbotron subhead" id="overview">
+  <div class="container">
+	<h2>Edit Program</h2>    
+  </div>
+</header>
+<legend style="margin-bottom: 15px;">Program Details</legend>
+<%= form_for @program, :url => programs_update_path, :html => { :class => 'form-horizontal'} do |f| %>
+<section class="section-with-margin" id="basic">
+<%=f.hidden_field :id, :value => @program.id%>
+<% if @program.house_id == 84 %>
+	<%= render 'mhwow_edit' %>
+<% else %>
+<div class="row">
+		<div class="span5">
+			<div class="edit_program_header">
+				<h2>Edit Program</h2>
+			</div>
+				<div class="control-group">
+			    <%= f.label :date, :class => 'control-label' %>
+			    <div class="controls">
+			      <%= f.text_field :date, :class => 'input-small', :id => 'opened_date', :required => true %>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <%= f.label :name, :class => 'control-label' %>
+			    <div class="controls">
+			        <%= f.text_field :name, :class => 'input-large'%>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <%= f.label :description, :class => 'control-label' %>
+			    <div class="controls">
+			      <%= f.text_area :description, :class => 'input-large', :rows => 6 %>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			  	<%= f.label :image, :class => 'control-label' %>
+			  	<div class="controls">
+			  		<%= f.file_field :image %>
+			  	</div>
+			  </div>
+			  <div class="control-group">
+			    <%= f.label :program_type_id, :class => 'control-label' %>
+			    <div class="controls">
+			      <%= f.collection_select :program_type_id, ProgramType.all, :id, :name, :class => 'input-large' %>
+			    </div>
+			  </div>			  
+				  <!-- <div class="control-group">
+				    <%#= f.label :mhwowcity_id, 'MHWOW City', :class => 'control-label' %>
+				    <div class="controls">
+				      <%#= f.collection_select :mhwowcity_id, Mhwowcity.all, :id, :location, :class => 'input-large' %>
+				    </div>
+				  </div> -->
+				 
+			  <div class="control-group">
+			    <%= f.label :submitter_id, :class => 'control-label' %>
+			    <div class="controls">
+			    	
+			    		<%= f.collection_select :submitter_id, User.where("house_id = ? and active = true", @program.house).order("first_name, last_name"), :id, :firstlast %>
+			      
+			    </div>
+			  </div>			  
+			  <div class="control-group">
+			    <%= f.label :partnership, :class => 'control-label' %>
+			    <div class="controls" id="partnership">
+			    	<% if @program.partner? %>
+			      <%= f.check_box :partnership, { checked: true }%>
+			      <% else %>
+			      <%= f.check_box :partnership %>
+			      <% end %>
+			    </div>
+			  </div>
+			  
+			  <div class="control-group" id="partner" style="display:none;">
+			    <%= f.label :partner, :class => 'control-label' %>
+			    <div class="controls">
+			    	<% if @program.partner? %>
+			      <%= f.text_field :partner, :class => 'input-large', :value => @program.partner %>			      
+			      <% else %>
+			      <%= f.text_field :partner, :class => 'input-large' %>
+			      <% end %>
+			    </div>
+			  </div>			  
+			  <div class="control-group" id="direct-service">
+			    <%= f.label :direct_service, :class => 'control-label' %>
+			    <div class="controls" id="direct-service">
+			      <%= f.check_box :direct_service%>
+			    </div>
+			  </div>			  
+			  
+				  <div class="control-group">
+				    <%= f.label :attended_total, "Total Attendees", :class => 'control-label' %>
+				    <div class="controls">
+				      <%= f.text_field :attended_total, :class => 'input-large', :style => "width: 20px;", :placeholder => 0  %>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <%= f.label :attended_residents, "Residents", :class => 'control-label' %>
+				    <div class="controls">
+				      <%= f.text_field :attended_residents, :class => 'input-large', :style => "width: 20px;", :placeholder => 0  %>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <%= f.label :attended_new, "First-Timers", :class => 'control-label' %>
+				    <div class="controls">
+				      <%= f.text_field :attended_new, :class => 'input-large', :style => "width: 20px;", :placeholder => 0 %>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <%= f.label :status, "Change Status", :class => 'control-label' %>
+				    <div class="controls">
+							<%= f.select :status, [["Submitted", 1],["Approved", 2],["Rejected", 3]] %>
+				    </div>
+				  </div>				
+			  </div>
+			</div>
+</section>
+<fieldset>
+	<legend>Save</legend>	
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-large btn-block btn-primary' %>
+    <%= link_to "Cancel", programs_index_path, :class => 'btn btn-large btn-block' %>    
+  </div>
+</fieldset>
+<fieldset>
+	<legend>Delete</legend>
+	<%= link_to "Delete Program", "/programs/destroy/" + @program.id.to_s, :method => :delete, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, :class => 'btn btn-large btn-danger btn-block' %>
+</fieldset>
+<% end %>
+<% end %>

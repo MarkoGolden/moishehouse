@@ -1,0 +1,185 @@
+<div class="page-header">
+  <h1>My Info</h1>
+</div>
+<div class="row">
+<div class="span3">
+  <div id="tabs">
+	  <ul class="nav nav-tabs nav-stacked affix" id="leftnav">
+	    <li><a href="#basic"><i class="icon-chevron-right"></i> Basic</a></li>
+	    <li><a href="#mailing"><i class="icon-chevron-right"></i> Mailing</a></li>
+	    <li><a href="#programs"><i class="icon-chevron-right"></i> Programs</a></li>
+	    <li><a href="#save"><i class="icon-chevron-right"></i> Save</a></li></a></li>
+	  </ul>
+  </div>
+</div>
+<div class="span9">
+<%= form_for :user, :url => residents_myinfosubmit_path, :html => { :class => 'form-horizontal', :multipart => true } do |f| %>
+	<section class="section-with-margin" id="basic">
+	  <fieldset>
+		<legend>Basic Info</legend>
+		<div class="row">
+			<div class="span4">
+				<div class="control-group">
+				    <%= f.label :email, :class => 'control-label' %>
+					<div class="controls">
+				        	<%= f.text_field :email, :class => 'input-large', :placeholder => "Email" %>
+					</div>
+				</div>								
+				<div class="control-group">
+				    <%= f.label :resetpassword, "Reset Password", :class => 'control-label' %>
+					<div class="controls">
+				        <%= f.password_field :password, :class => 'input-large', :value => "123456789" %>
+				    </div>
+				</div>
+				<div class="control-group">
+				    <%= f.label :first_name, :class => 'control-label' %>
+					<div class="controls">
+				        <%= f.text_field :first_name, :class => 'input-large', :placeholder => "First" %>
+				    </div>
+				</div>
+				<div class="control-group">
+				    <%= f.label :last_name, :class => 'control-label' %>
+					<div class="controls">
+				        <%= f.text_field :last_name, :class => 'input-large', :placeholder => "Last" %>
+				    </div>
+				</div>
+				<div class="control-group">
+				  <%= f.label :bio, :class => 'control-label' %>
+					<div class="controls">
+				    <%= f.text_area :bio, :class => 'input-large', :placeholder => "Bio" %>
+				  </div>
+				</div>
+				<div class="control-group">
+				    <%= f.label :phone, :class => 'control-label' %>
+					<div class="controls">
+				        <%= f.text_field :phone, :class => 'input-large', :placeholder => "Phone" %>
+				    </div>
+				</div>
+				<div class="control-group">
+				    <%= f.label :house_id, :class => 'control-label' %>
+					<div class="controls">
+				        <span class="input-large uneditable-input"><%= @user.house.location %></span>
+				    </div>
+				</div>
+			</div>
+			<div class="span3 offset1">
+				    <ul class="thumbnails">
+					  <li class="span2 offset3">
+					    <div class="thumbnail">
+					      <%= image_tag @user.avatar.url, :width => "160"%>
+					      <h3>Upload Image</h3>
+						  <p class="text-center">
+							<%= f.file_field :avatar %>						
+						  </p>
+					    </div>
+					  </li>
+					</ul>
+			</div>
+		</div>	
+	  </fieldset>
+	</section>
+	<section class="section-with-margin" id="mailing">
+	  <fieldset>
+		<legend>Mailing Info</legend>
+				<div class="control-group">
+				    <%= f.label :mail_address, :class => 'control-label' %>
+					<div class="controls">
+				        <%= f.text_field :mail_address, :class => 'input-large', :placeholder => "Address" %>
+				    </div>
+				</div>
+				<div class="control-group">
+				    <%= f.label :mail_city, :class => 'control-label' %>
+					<div class="controls">
+				        <%= f.text_field :mail_city, :class => 'input-large', :placeholder => "City" %>
+				    </div>
+				</div>
+				<div class="control-group">
+				    <%= f.label :mail_state, :class => 'control-label' %>
+					<div class="controls">
+				        <%= f.text_field :mail_state, :class => 'input-large', :placeholder => "State" %>
+				    </div>
+				</div>
+				<div class="control-group">
+				    <%= f.label :mail_zip, :class => 'control-label' %>
+					<div class="controls">
+				        <%= f.text_field :mail_zip, :class => 'input-large', :placeholder => "Zip" %>
+				    </div>
+				</div>
+				<div class="control-group">
+				    <%= f.label :mail_country, :class => 'control-label' %>
+					<div class="controls">
+				        <%= f.select :mail_country, country_array, :prompt => "Select Country", :default => @user.house.country, :class => 'input-large' %>
+				    </div>
+				</div>
+				<div class="control-group">
+				    <%= f.label :mail_check_name, :class => 'control-label' %>
+					<div class="controls">
+				        <%= f.text_field :mail_check_name, :class => 'input-large', :placeholder => "Name on Check" %>
+				    </div>
+				</div>
+		</fieldset>
+	</section>
+	<section class="section-with-margin" id="programs">
+	<fieldset>
+		<legend>Programs</legend>
+		  <table class="table table-striped">
+	    <thead>
+	      <tr>
+	        <th>Date</th>
+	        <th>Name</th>
+	        <th>Description</th>
+	        <th>Complete</th>
+	        <th>Partner</th>
+	        <th>Photos</th>
+	        <th>Receipts</th>
+	        <th>Edit</th>
+	      </tr>
+	    </thead>
+	    <tbody>
+	      <%# @user.programs.where("submitted_date > ?", 1.month.ago).each do |p| %>
+	      <%# find ideal lookup time for users programs %>
+	      <% @user.programs.where("date > ?", 6.months.ago).order("date DESC").each do |p| %>
+	      <tr>
+	        <% if !p.date.nil? %>
+	          <td><%= p.date.strftime("%D") %></td>
+	          <% else %>
+	          <td>N/A</td>
+	          <% end %>
+	          <td style="width: 100px;"><%= p.name %></td>
+	          <td class="td-align-center" style="max-width: 100px;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;"><%= p.description %></td>
+	          <% if p.date.past? %>
+	          <td style="text-align:center;"><img src="/assets/greencheck.png" /></td>
+	          <% else %>
+	          <td style="text-align:center;">No</td>
+	          <% end %>
+	          <% if p.partner != nil %>
+            <td class="td-align-center" id="partner"><img src="/assets/greencheck.png" style="margin-left: 15px;" title="<%=p.partner%>" /></td>
+            <% else %>
+            <td></td>
+            <% end %>
+	          <td><i class="icon-plus-sign" style="font-size:22px;color:red;margin-left:15px;"></i></td>
+	          <td style="width: 200px;"><% p.receipts.each do |r|%> <%=link_to number_to_currency(r.amount).to_s, "/residents/receipts_edit/#{r.id}", :class => r.button_color, :style => 'max-width:30px;' %><% end %></td>
+	          <td>
+	            <% if 6.months.ago < p.date %>
+	            <%= link_to "Edit",
+	                        "/residents/programs_edit/#{p.id}", :class => 'btn btn-medium' %>
+	            <% end %>
+	          </td>
+	        </tr>
+	      <% end %>
+	    </tbody>
+	  </table>
+	</fieldset>
+	</section>
+	<section class="section-with-margin" id="save">
+		<fieldset>
+			<legend>Save</legend>
+		  <div class="form-actions">
+			<%= f.submit "Save", :class => 'btn btn-large btn-block btn-primary' %>
+		    <%= link_to "Cancel", "/residents", :class => 'btn btn-large btn-block' %>
+		  </div>
+		</fieldset>
+	</section>
+</div>
+</div>
+<% end %>

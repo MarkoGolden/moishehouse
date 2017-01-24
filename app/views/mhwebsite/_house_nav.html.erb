@@ -1,0 +1,15 @@
+<div id="house-container" style="max-width: 885px; margin: 0 auto;">
+	<div id="page-header" style="position:relative;">		
+		<div id="nav" style="list-style:none;">
+			<%= link_to image_tag("/assets/mhlogonew.png"), 'http://lvh.me:3000', style: 'float: left;' %>
+			<div id="nav-content" style="list-style:none;float:right;margin-top:30px">
+				<ul style="list-style:none;">
+					<li class="house-nav" style="display: inline-block"><%= link_to 'ABOUT', '#', style: 'text-decoration:none;' %></li>		
+					<li class="house-nav" style="display: inline-block"><%= link_to 'RESIDENTS', '#', style: 'text-decoration:none;' %></li>
+					<li class="house-nav" style="display: inline-block"><%= link_to 'PHOTOS', '#', style: 'text-decoration:none;' %></li>		
+					<li class="house-nav" style="display: inline-block;"><%= link_to 'CALENDAR', @house.calendar_url, :target => "_blank", style: 'text-decoration:none;' %></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

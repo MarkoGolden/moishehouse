@@ -1,0 +1,43 @@
+<div class="hero-unit" style="margin-top: -20px;">
+  <h1>Moishe House</h1>
+  <p>Inspiring Vibrant Jewish Communities For Young Adults</p>
+</div>
+<div class="wrapper">
+<% if user_signed_in? and current_user.role = "admin" %>
+
+      <div class="row-fluid" style="float:left; display:inline-block; width: 350px;margin: 20px;">        
+          <h2 style="text-align:center;">Admin</h2>                    
+          <a href="/programs" class="btn btn-large btn-block btn-primary">Programs</a>          
+          <a href="/receipts" class="btn btn-large btn-block btn-primary">Receipts</a>      
+          <a href="/users" class="btn btn-large btn-block btn-primary">User List</a>
+    	  <a id="houses_anchor" href="/houses" class="btn btn-large btn-block btn-primary">Houses</a>    		    			
+    			<a href="/rents" class="btn btn-large btn-block btn-primary">Closeout</a>
+    			<a href="/grants" class="btn btn-large btn-block btn-primary">Grants</a>
+    			<a href="/reports" class="btn btn-large btn-block btn-primary">Reports</a>			        
+          <a href="#" class="btn btn-large btn-block btn-primary">Resources</a>
+        </div>
+      </div>
+
+      <div class="row-fluid" style="float:left; display:inline-block; width: 350px;margin: 20px;">
+        <h2 style="text-align:center;">General</h2>
+        <%= link_to 'My Info', "/users/edit/#{current_user.id}", :class => "btn btn-large btn-block btn-primary" %>
+        <a href="/residents/contacts" class="btn btn-large btn-block btn-primary">Contact List</a>
+        <a href="/residents/programs" class="btn btn-large btn-block btn-primary">My Programs</a>
+        <a href="/residents/receipts" class="btn btn-large btn-block btn-primary">My Receipts</a>
+        <a href="/residents/budget" class="btn btn-large btn-block btn-primary">View Budget</a>
+      </div>      
+
+      <div class="row-fluid" style="float:left;display:inline-block;width:350px;margin: 20px;">
+                  
+          <h2 style="text-align:center;">MHWOW</h2>
+          <a href="/receipts/mhwow" class="btn btn-large btn-block btn-primary">MHWOW Receipts</a>
+          <a href="/programs/mhwow" class="btn btn-large btn-block btn-primary">MHWOW Programs</a>
+          <a href="/users#mhwow" class="btn btn-large btn-block btn-primary">MHWOW Hosts</a>
+        </div>
+      </div>
+
+
+
+<% end %>
+</div>
+

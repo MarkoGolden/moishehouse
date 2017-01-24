@@ -1,0 +1,25 @@
+<div class="mhwow-body">
+<div id="hostcenter" class="wrapped-content" style="margin-top: 70px;">
+	<br><br>
+	<div class="grid-row clearfix" style="float:left;">
+<% if user_signed_in? and current_user.role = "mhwow" %>
+	<div class="row-fluid mhwow" style="margin-left: 0;">
+	  <div class="span4 offset4 mhwow" style="margin-left: 0;width: 200px; float: left;">
+			<a href="/residents/programs" class="btn btn-large btn-block btn-primary">My Programs</a>
+			<%= link_to 'User Profile', "/users/edit/#{current_user.id}", :class => "btn btn-large btn-block btn-primary" %>
+			<a href="/residents/upcoming-programs" class="btn btn-large btn-block btn-primary">Upcoming MHWOW Programs</a>
+			<a href="/mhwow/register-program" class="btn btn-large btn-block btn-primary">Register a Program</a>
+			<a href="/mhwow/upload-receipts" class="btn btn-large btn-block btn-primary">Upload Receipts</a>
+			<a href="/mhwow/scholarship-form" class="btn btn-large btn-block btn-primary">Scholarship Form</a>
+			<a href="/mhwow/guidelines" class="btn btn-large btn-block btn-primary">Guidelines & Policies</a>		
+			<!-- <a href="/mhwow/program-ideas" class="btn btn-large btn-block btn-primary">Program Ideas</a> -->
+			<!-- <a href="/mhwow/help" class="btn btn-large btn-block btn-primary">Help</a>		   -->
+		</div>
+	</div>
+	<div class="host-box" style="background-color: #FFF; float: left;">
+		<p>blah</p>
+	</div>
+<% end %>
+</div>
+</div>
+</div>

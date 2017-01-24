@@ -1,0 +1,67 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  opened_date: 2013-03-06
+  city: MyString
+  state: MyString
+  country: MyString
+  region: MyString
+  web_description: MyText
+  brn: false
+  rsj: false
+  mail_address: MyString
+  mail_city: MyString
+  mail_state: MyString
+  mail_zip: MyString
+  mail_instructions: MyText
+  mail_international: false
+  contact_phone: MyString
+  contact_email: MyString
+  website: MyString
+  calendar: MyString
+  rent_name: MyString
+  rent_address: MyString
+  rent_city: MyString
+  rent_state: MyString
+  rent_zip: MyString
+  rent_instructions: MyText
+  rent_name_on_check: MyString
+  programs_per_month: MyString
+  rent_total: 1.5
+  rent_subsidy: 1.5
+  budget_program: 1.5
+  budget_cleaning: 1.5
+  active: false
+
+two:
+  opened_date: 2013-03-06
+  city: MyString
+  state: MyString
+  country: MyString
+  region: MyString
+  web_description: MyText
+  brn: false
+  rsj: false
+  mail_address: MyString
+  mail_city: MyString
+  mail_state: MyString
+  mail_zip: MyString
+  mail_instructions: MyText
+  mail_international: false
+  contact_phone: MyString
+  contact_email: MyString
+  website: MyString
+  calendar: MyString
+  rent_name: MyString
+  rent_address: MyString
+  rent_city: MyString
+  rent_state: MyString
+  rent_zip: MyString
+  rent_instructions: MyText
+  rent_name_on_check: MyString
+  programs_per_month: MyString
+  rent_total: 1.5
+  rent_subsidy: 1.5
+  budget_program: 1.5
+  budget_cleaning: 1.5
+  active: false
