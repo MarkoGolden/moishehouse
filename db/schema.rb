@@ -52,13 +52,13 @@ ActiveRecord::Schema.define(:version => 20140110195413) do
 
   create_table "grants", :force => true do |t|
     t.string   "name"
-    t.decimal  "amount",           :precision => 8,  :scale => 2
+    t.decimal  "amount",           :precision => 8, :scale => 2
     t.text     "description"
     t.datetime "expires"
-    t.datetime "created_at",                                      :null => false
-    t.datetime "updated_at",                                      :null => false
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
     t.boolean  "active"
-    t.decimal  "amount_remaining", :precision => 10, :scale => 0
+    t.decimal  "amount_remaining"
   end
 
   create_table "granttypes", :force => true do |t|
@@ -165,6 +165,7 @@ ActiveRecord::Schema.define(:version => 20140110195413) do
 
   create_table "program_photos", :force => true do |t|
     t.integer  "program_id"
+    t.integer  "programs_id"
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
     t.string   "photo_file_name"
@@ -196,6 +197,7 @@ ActiveRecord::Schema.define(:version => 20140110195413) do
     t.integer  "house_id"
     t.integer  "purpose_type"
     t.datetime "completed_date"
+    t.datetime "photo_updated_date"
     t.text     "admin_notes"
     t.string   "partner"
     t.integer  "submitter_id"
@@ -216,7 +218,6 @@ ActiveRecord::Schema.define(:version => 20140110195413) do
     t.integer  "mhwowcity_id"
     t.integer  "gallery_id"
     t.string   "program_photos"
-    t.datetime "photo_updated_date"
     t.text     "participants"
     t.string   "asset_file_name"
     t.string   "asset_content_type"

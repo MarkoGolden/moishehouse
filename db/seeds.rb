@@ -91,3 +91,11 @@ Mhwowcity.create!(:id => 18, :location => "Solana Beach")
 Mhwowcity.create!(:id => 19, :location => "Spring Valley")
 Mhwowcity.create!(:id => 20, :location => "Vista")
 puts "done"
+
+user = User.new
+user.email = 'roey@moishehouse.org'
+user.password = 'password'
+user.first_name = 'roey'
+user.last_name = 'test'
+user.role = 'manager'
+user.save!

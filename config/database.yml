@@ -9,13 +9,14 @@
 # And be sure to use new-style password hashing:
 #   http://dev.mysql.com/doc/refman/5.0/en/old-client.html
 development:
-  adapter: mysql2
+  adapter: postgresql #mysql2
   encoding: utf8
   reconnect: false
   database: moishe_development
   pool: 5
-  username: root
-  password:
+  host: localhost
+  username: postgres
+  password: 123456
   #socket: /tmp/mysql.sock
 
 # Warning: The database defined as "test" will be erased and
@@ -32,7 +33,7 @@ test: &test
   #socket: /tmp/mysql.sock
 
 production:
-  adapter: pg
+  adapter: postgresql
   encoding: utf8
   reconnect: false
   # database: moishe_production
