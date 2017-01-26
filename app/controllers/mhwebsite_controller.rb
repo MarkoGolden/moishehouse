@@ -1,7 +1,7 @@
 class MhwebsiteController < ApplicationController	
 	def index
 		@houses = House.where("active = TRUE AND id NOT IN(?)", [11,84])
-		@mhwebsiteprograms = Program.where("house_id NOT IN(?) AND program_type_id IN(?) AND Date BETWEEN STR_TO_DATE(?) AND now()", [11,84], [0,1,2,3,4,9], ['1/1/2013', '%m/1/%Y'])
+		@mhwebsiteprograms = Program.where("house_id NOT IN(?) AND program_type_id IN(?) AND Date BETWEEN TO_DATE(?) AND now()", [11,84], [0,1,2,3,4,9], ['1/1/2013', '%m/1/%Y'])
 
 		#this is how we get snapshot on old website. instead of date range ending on current date, it ends at end of current month. find out which is preferred/more accurate.
 		# @mhwebsiteprograms = Program.where("house_id NOT IN(11,84) AND program_type_id IN(0,1,2,3,4,9) AND Date BETWEEN STR_TO_DATE('1/1/2013', '%m/1/%Y') AND STR_TO_DATE('11/1/2013', '%m/1/%Y')")
