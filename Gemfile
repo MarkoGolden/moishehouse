@@ -28,15 +28,17 @@ gem 'friendly_id', '~> 4.0.0'
 
 
 group :production do
-  gem 'mysql'
+  # gem 'mysql'
   gem 'pg'
 end
 group :development do
   gem 'mysql2'
+  gem 'pg'
 end
 
 group :test do
   gem 'mysql2' 
+  # gem 'pg'
   # gem 'cucumber-rails', :require => false
   gem 'cucumber-rails'
   gem 'rspec-rails'
