@@ -35,9 +35,10 @@ test: &test
 production:
   adapter: postgresql
   encoding: utf8
-  reconnect: false
+  # reconnect: false
+  url: <%= ENV['DATABASE_URL'] %>
   # database: moishe_production
-  pool: 5
+  pool: 15
   # username: root
   # password:
   #socket: /tmp/mysql.sock
