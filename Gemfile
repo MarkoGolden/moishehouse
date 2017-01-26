@@ -16,6 +16,7 @@ gem 'aws-sdk'
 gem "rmagick"
 gem "carrierwave", '0.9.0'
 gem "nested_form"
+gem 'pg'
 gem "activerecord-postgresql-adapter"
 gem 'axlsx'
 gem 'axlsx_rails'
@@ -23,7 +24,6 @@ gem 'thin'
 gem 'newrelic_rpm'
 
 gem 'friendly_id', '~> 4.0.0'
-gem 'pg'
 
 group :production do
   # gem 'mysql'
