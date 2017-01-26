@@ -30,15 +30,15 @@ group :production do
   gem 'pg'
 end
 group :development do
-  gem 'mysql2'
-  gem "activerecord-mysql-adapter"
-  # gem 'pg'
+  # gem 'mysql2'
+  # gem "activerecord-mysql-adapter"
+  gem 'pg'
 end
 
 group :test do
-  gem 'mysql2' 
-  gem "activerecord-mysql-adapter"
-# gem 'pg'
+  # gem 'mysql2' 
+  # gem "activerecord-mysql-adapter"
+  gem 'pg'
   # gem 'cucumber-rails', :require => false
   gem 'cucumber-rails'
   gem 'rspec-rails'
