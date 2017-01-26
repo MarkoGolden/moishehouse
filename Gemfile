@@ -6,7 +6,6 @@ gem 'rails', '3.2.11'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 ruby "1.9.3"
-gem 'mysql2'
 gem "therubyracer"
 gem "less-rails"
 gem "twitter-bootstrap-rails"
@@ -17,7 +16,6 @@ gem 'aws-sdk'
 gem "rmagick"
 gem "carrierwave", '0.9.0'
 gem "nested_form"
-gem "activerecord-mysql-adapter"
 gem "activerecord-postgresql-adapter"
 gem 'axlsx'
 gem 'axlsx_rails'
@@ -33,12 +31,14 @@ group :production do
 end
 group :development do
   gem 'mysql2'
-  gem 'pg'
+  gem "activerecord-mysql-adapter"
+  # gem 'pg'
 end
 
 group :test do
   gem 'mysql2' 
-  # gem 'pg'
+  gem "activerecord-mysql-adapter"
+# gem 'pg'
   # gem 'cucumber-rails', :require => false
   gem 'cucumber-rails'
   gem 'rspec-rails'

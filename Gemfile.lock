@@ -265,7 +265,6 @@ DEPENDENCIES
   jquery-rails
   launchy (>= 2.1.2)
   less-rails
-  mysql
   mysql2
   nested_form
   net-sftp (~> 2.1.2)
