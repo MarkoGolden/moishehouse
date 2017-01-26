@@ -23,22 +23,22 @@ gem 'thin'
 gem 'newrelic_rpm'
 
 gem 'friendly_id', '~> 4.0.0'
-
+gem 'pg'
 
 group :production do
   # gem 'mysql'
-  gem 'pg'
+  # gem 'pg'
 end
 group :development do
   # gem 'mysql2'
   # gem "activerecord-mysql-adapter"
-  gem 'pg'
+  # gem 'pg'
 end
 
 group :test do
   # gem 'mysql2' 
   # gem "activerecord-mysql-adapter"
-  gem 'pg'
+  # gem 'pg'
   # gem 'cucumber-rails', :require => false
   gem 'cucumber-rails'
   gem 'rspec-rails'
